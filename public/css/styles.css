@@ -1,0 +1,53 @@
+.tags-container {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.tag-button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #5c67f2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tag-button.active {
+    background-color: #4a54e1;
+}
+
+.container {
+    margin-top: 20px;
+}
+.tag-button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    margin: 2px;
+    transition: background-color 0.3s;
+}
+
+.tag-button:hover {
+    background-color: #ccc;
+}
+
+.tag-button.selected {
+    background-color: #4285f4; /* 蓝色背景表示选中 */
+    color: white;
+}
+
+.toggle-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.toggle-button.active {
+    background-color: #4a54e1;
+    color: white;
+}
+
