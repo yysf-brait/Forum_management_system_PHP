@@ -98,7 +98,7 @@
         formData.append('remove_tags', Array.from(removeTags).join(','));
 
         axios.post('../../src/api/article_tag.php', formData)
-            .then(function (response) {
+            .then(function () {
                 alert('Tags updated successfully');
                 // Reset the initial selected state and sets
                 initialSelectedTags = new Set([...selectedTags]);
