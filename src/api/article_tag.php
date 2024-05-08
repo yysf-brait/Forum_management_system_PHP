@@ -3,7 +3,7 @@ session_start();
 include '../config.php';  global $conn;
 
 if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);     echo json_encode(['message' => '未登录，无法执行操作']);
+    http_response_code(401);     echo json_encode(['message' => 'login required']);
     exit;
 }
 

@@ -344,7 +344,7 @@ END //
 DELIMITER ;
 
 
-CALL SearchArticlesWithPaging('章', 1, 5, @totalPageCount);
+CALL SearchArticlesWithPaging('a1', 1, 5, @totalPageCount);
 SELECT @totalPageCount;
 
 -- Create stored procedure:

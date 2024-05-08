@@ -1,5 +1,5 @@
 <?php
-session_start();  // 开始或继续会话
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">

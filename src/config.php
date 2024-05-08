@@ -6,5 +6,5 @@ $dbname = "project240415";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    die("连接失败: " . $conn->connect_error);
+    die("Error connect: " . $conn->connect_error);
 }

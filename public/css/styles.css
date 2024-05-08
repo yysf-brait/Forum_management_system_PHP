@@ -34,7 +34,7 @@
 }
 
 .tag-button.selected {
-    background-color: #4285f4; /* 蓝色背景表示选中 */
+    background-color: #4285f4;
     color: white;
 }
 
