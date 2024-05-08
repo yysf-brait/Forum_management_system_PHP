@@ -34,9 +34,9 @@ foreach ($lines as $line) {
 foreach ($stats as $date => $data) {
     $newUserCount = count($data['newUsers']);
     $activeUserCount = count($data['activeUsers']);
-    echo "日期: $date\t";
-    echo "新增用户数: $newUserCount\t";
-    echo "活跃用户数: $activeUserCount<br>";
+    echo "Date: $date\t";
+    echo "New Users: $newUserCount\t";
+    echo "Active Users: $activeUserCount<br>";
     echo "--------------------------------------------<br>";
 }
 ?>

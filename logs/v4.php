@@ -59,26 +59,26 @@ foreach ($lines as $line) {
 
 // 输出结果
 foreach ($stats as $date => $data) {
-    echo "日期: $date\t";
-    echo "新增文章数: " . count($data['createdArticles']) . "\t";
-    echo "删除文章数: " . count($data['deletedArticles']) . "\t";
+    echo "date: $date\t";
+    echo "new articles created: " . count($data['createdArticles']) . "\t";
+    echo "deleted articles: " . count($data['deletedArticles']) . "\t";
 
     if (!empty($data['mostViewedArticles'])) {
         arsort($data['mostViewedArticles']);
         $mostViewed = key($data['mostViewedArticles']);
         $views = $data['mostViewedArticles'][$mostViewed];
-        echo "查看最多的文章: Article $mostViewed (查看次数: $views)\t";
+        echo "most viewed article: Article $mostViewed (views: $views)\t";
     } else {
-        echo "没有文章查看记录\t";
+        echo "no article view records\t";
     }
 
     if (!empty($data['mostEditedArticles'])) {
         arsort($data['mostEditedArticles']);
         $mostEdited = key($data['mostEditedArticles']);
         $edits = $data['mostEditedArticles'][$mostEdited];
-        echo "编辑最多的文章: Article $mostEdited (编辑次数: $edits)\t";
+        echo "most edited article: Article $mostEdited (edits: $edits)\t";
     } else {
-        echo "没有文章编辑记录\t";
+        echo "no article edit records\t";
     }
     echo "<br>--------------------------------------------<br>";
 }

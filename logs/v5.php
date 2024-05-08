@@ -39,20 +39,23 @@ foreach ($lines as $line) {
 }
 
 // 输出统计结果
-echo "操作系统使用情况:<br>";
+echo "OS usage:<br>";
+$total = array_sum($osUsage);
 foreach ($osUsage as $os => $count) {
-    echo "  $os: $count 次<br>";
+    echo "  $os: $count time (" . number_format($count / $total * 100, 2) . "%)<br>";
 }
 echo "--------------------------------------------<br>";
 
-echo "浏览器使用情况:<br>";
+echo "Browser usage:<br>";
+$total = array_sum($browserUsage);
 foreach ($browserUsage as $browser => $count) {
-    echo "  $browser: $count 次<br>";
+    echo "  $browser: $count time (" . number_format($count / $total * 100, 2) . "%)<br>";
 }
 echo "--------------------------------------------<br>";
 
-echo "主机使用情况:<br>";
+echo "Host usage:<br>";
+$total = array_sum($hostUsage);
 foreach ($hostUsage as $host => $count) {
-    echo "  $host: $count 次<br>";
+    echo "  $host: $count time (" . number_format($count / $total * 100, 2) . "%)<br>";
 }
 ?>

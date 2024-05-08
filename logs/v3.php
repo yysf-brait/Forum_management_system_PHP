@@ -1,5 +1,5 @@
 <?php
-$logFile = 'article_logs.txt';  // 修改为你的日志文件路径
+$logFile = 'article_logs.txt';
 $lines = file($logFile);
 
 // 初始化统计数组
@@ -14,11 +14,12 @@ foreach ($lines as $line) {
         list($key, $value) = explode(':', $part);
         $details[$key] = trim($value);
     }
+    // 获取datails中AT的下一个键
+    $pos = array_search('AT', array_keys($details)) + 1;
+    $t = array_keys($details);
+    $nextKey = $t[$pos];
 
-    // 时间统计
-    $timestamp = strtotime($details['AT']);
-    $hour = date('G', $timestamp);
-    $hourlyAccess[(int)$hour]++;
+    $hourlyAccess[(int)$nextKey]++;
 
     // 页面访问统计
     if (!empty($details['Article'])) {
@@ -49,7 +50,7 @@ $mostVisitedPage = array_search($maxPageAccess, $pageAccess);
 $maxOperations = max($operationCount);
 $mostCommonOperation = array_search($maxOperations, $operationCount);
 
-echo "最繁忙的时段: $peakHour:00 - " . ($peakHour + 1) . ":00 with $maxAccesses accesses\n";
-echo "最频繁访问的页面: Article ID $mostVisitedPage with $maxPageAccess visits\n";
-echo "最常见的操作: $mostCommonOperation with $maxOperations occurrences\n";
+echo "The busiest hour: $peakHour:00 - " . ($peakHour + 1) . ":00 with $maxAccesses accesses<br>";
+echo "The most visited article:Article ID $mostVisitedPage with $maxPageAccess visits<br>";
+echo "The most common operation: $mostCommonOperation with $maxOperations occurrences<br>";
 ?>
