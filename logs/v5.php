@@ -38,7 +38,6 @@ foreach ($lines as $line) {
     }
 }
 
-// 输出统计结果
 echo "OS usage:<br>";
 $total = array_sum($osUsage);
 foreach ($osUsage as $os => $count) {

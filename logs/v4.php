@@ -13,8 +13,7 @@ foreach ($lines as $line) {
 
 
 
-    $date = explode(' ', $details['AT'])[0]; // 获取日期部分
-
+    $date = explode(' ', $details['AT'])[0]; 
 
     if (!isset($stats[$date])) {
         $stats[$date] = [
@@ -25,8 +24,7 @@ foreach ($lines as $line) {
         ];
     }
 
-    // $details['Action']清除尾部空白字符
-    $details['Action'] = trim($details['Action']);
+        $details['Action'] = trim($details['Action']);
 
     switch ($details['Action']) {
         case 'Create':
@@ -57,7 +55,6 @@ foreach ($lines as $line) {
 }
 
 
-// 输出结果
 foreach ($stats as $date => $data) {
     echo "date: $date\t";
     echo "new articles created: " . count($data['createdArticles']) . "\t";

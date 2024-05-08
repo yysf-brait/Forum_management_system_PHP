@@ -8,13 +8,13 @@ CREATE TABLE users
 (
     user_id    INT AUTO_INCREMENT PRIMARY KEY,
     username   VARCHAR(255)                        NOT NULL UNIQUE CHECK (NOT username LIKE '%,%'),
-    password   VARCHAR(255)                        NOT NULL, -- 存储加密后的密码
+    password   VARCHAR(255)                        NOT NULL, -- Store encrypted password
     email      VARCHAR(255)                        NOT NULL,
     is_admin   BOOLEAN   DEFAULT FALSE             NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
--- 创建文章表
+-- Create articles table
 CREATE TABLE articles
 (
     article_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,14 +24,14 @@ CREATE TABLE articles
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- 创建标签表
+-- Create tags table
 CREATE TABLE tags
 (
     tag_id   INT AUTO_INCREMENT PRIMARY KEY,
     tag_name VARCHAR(100) NOT NULL UNIQUE CHECK (NOT tag_name LIKE '%,%')
 );
 
--- 文章和标签的多对多关系表
+-- Many-to-many relationship table between articles and tags
 CREATE TABLE article_tags
 (
     article_id INT,
@@ -41,7 +41,7 @@ CREATE TABLE article_tags
     FOREIGN KEY (tag_id) REFERENCES tags (tag_id) ON DELETE CASCADE
 );
 
--- 文章和作者的多对多关系表
+-- Many-to-many relationship table between articles and authors
 CREATE TABLE article_authors
 (
     article_id INT,
@@ -116,9 +116,9 @@ insert into article_tags (article_id, tag_id)
 values (9, 4);
 
 
--- 创建视图：
--- 展示文章id、所有标签名字
--- 可能文章不存在标签，则不在表中
+-- Create view:
+-- Display article id and all tag names
+-- If an article does not have tags, it will not appear in this table
 DROP view if exists article_tags_view;
 CREATE VIEW article_tags_view AS
 SELECT at.article_id,
@@ -127,9 +127,9 @@ FROM article_tags at
          JOIN tags t ON at.tag_id = t.tag_id
 GROUP BY at.article_id;
 
--- 创建视图：
--- 展示文章id、所有作者名字
--- 可能文章不存在作者，则不在表中
+-- Create view:
+-- Display article id and all author names
+-- If an article does not have authors, it will not appear in this table
 -- DROP view if exists article_authors_view;
 CREATE VIEW article_authors_view AS
 SELECT aa.article_id,
@@ -138,10 +138,9 @@ FROM article_authors aa
          JOIN users u ON aa.user_id = u.user_id
 GROUP BY aa.article_id;
 
-
--- 创建视图：
--- 展示文章细节，包含文章标题、所有作者、创建时间、最晚更新时间、所有标签名字、文章内容
--- 作者与标签可能不存在，此时使用‘未知’和‘无’填充
+-- Create view:
+-- Display article details, including article title, all authors, creation time, latest update time, all tag names, and article content
+-- If there are no authors or tags, use 'Unknown' and 'None' to fill
 DROP view if exists article_detail_view;
 CREATE VIEW article_detail_view AS
 SELECT a.article_id,
@@ -149,7 +148,7 @@ SELECT a.article_id,
        IFNULL(authors, 'Unknown') AS authors,
        a.created_at,
        a.updated_at,
-       IFNULL(tags, 'null')      AS tags,
+       IFNULL(tags, 'None')      AS tags,
        a.content
 FROM articles a
          LEFT JOIN article_authors_view aav ON a.article_id = aav.article_id
@@ -159,10 +158,10 @@ select *
 from article_detail_view
 where article_id = 1;
 
--- 创建视图：
--- 展示文章列表，包含文章标题、所有作者、创建时间、最晚更新时间、所有标签名字
--- 作者与标签可能不存在，此时使用‘未知’和‘无’填充
--- 按照最晚更新时间倒序排序
+-- Create view:
+-- Display list of articles, including article title, all authors, creation time, latest update time, and all tag names
+-- If there are no authors or tags, use 'Unknown' and 'None' to fill
+-- Sort by the latest update time descending
 DROP view if exists article_list_view;
 CREATE VIEW article_list_view AS
 SELECT a.article_id,
@@ -176,8 +175,8 @@ FROM articles a
          LEFT JOIN article_tags_view atv ON a.article_id = atv.article_id
 ORDER BY a.updated_at DESC;
 
--- 创建存储过程：
--- 为article_list_view增加分页功能
+-- Create stored procedure:
+-- Add pagination functionality to article_list_view
 DROP PROCEDURE IF EXISTS FetchArticlesByPage;
 DELIMITER //
 
@@ -187,7 +186,7 @@ CREATE PROCEDURE FetchArticlesByPage(
 )
 BEGIN
     DECLARE offset INT;
-    SET offset = (pageNum - 1) * pageSize; -- 计算偏移量
+    SET offset = (pageNum - 1) * pageSize; -- Calculate offset
 
     SELECT article_id,
            title,
@@ -204,11 +203,9 @@ DELIMITER ;
 
 CALL FetchArticlesByPage(1, 5);
 
-
-
--- 创建视图：
--- 查询所有tags的id、名称，以及每个tag下的文章数量
--- 按照文章数量倒序排序
+-- Create view:
+-- Query all tags' ids, names, and the count of articles under each tag
+-- Order by the count of articles in descending order
 DROP view if exists tag_article_count_view;
 CREATE VIEW tag_article_count_view AS
 SELECT t.tag_id,
@@ -222,16 +219,16 @@ ORDER BY article_count DESC;
 select *
 from tag_article_count_view;
 
--- 创建存储过程：
--- 根据tag_id的list查询文章列表
--- 作品关联的Ids包含在tagIds中的作品
--- 进行分页
+-- Create stored procedure:
+-- Query article list based on a list of tag_ids
+-- Articles associated with Ids included in tagIds
+-- With pagination
 DROP PROCEDURE IF EXISTS FetchArticlesByTagsWithPaging;
 
 DELIMITER //
 
 CREATE PROCEDURE FetchArticlesByTagsWithPaging(
-    IN tagIds VARCHAR(255), -- 以逗号分隔的tag_id列表
+    IN tagIds VARCHAR(255), -- Comma-separated list of tag_ids
     IN pageNum INT,
     IN pageSize INT,
     OUT totalArticles INT
@@ -239,8 +236,8 @@ CREATE PROCEDURE FetchArticlesByTagsWithPaging(
 BEGIN
     DECLARE offset INT;
     SET offset = (pageNum - 1) * pageSize;
-    -- 辅助表：
-    -- 作品关联的Ids包含在tagIds中的作品
+    -- Helper table:
+    -- Articles associated with Ids included in tagIds
     WITH FilteredArticles AS (SELECT at.article_id
                               FROM article_tags at
                               WHERE FIND_IN_SET(at.tag_id, tagIds)
@@ -264,15 +261,15 @@ DELIMITER ;
 CALL FetchArticlesByTagsWithPaging('4,1,2', 1, 5, @totalArticles);
 SELECT @totalArticles;
 
--- 创建存储过程：
--- 根据tag_id的list查询文章列表
--- 作品关联的Ids完全涵盖了tagIds
+-- Create stored procedure:
+-- Query article list based on a list of tag_ids
+-- Articles where associated Ids fully cover tagIds
 DROP PROCEDURE IF EXISTS FetchArticlesByAllTagsWithPaging;
 
 DELIMITER //
 
 CREATE PROCEDURE FetchArticlesByAllTagsWithPaging(
-    IN tagIds VARCHAR(255), -- 以逗号分隔的tag_id列表
+    IN tagIds VARCHAR(255), -- Comma-separated list of tag_ids
     IN pageNum INT,
     IN pageSize INT,
     OUT totalArticles INT
@@ -280,8 +277,8 @@ CREATE PROCEDURE FetchArticlesByAllTagsWithPaging(
 BEGIN
     DECLARE offset INT;
     SET offset = (pageNum - 1) * pageSize;
-    -- 辅助表：
-    -- 作品关联的Ids完全涵盖了tagIds
+    -- Helper table:
+    -- Articles where associated Ids fully cover tagIds
     WITH FilteredArticles AS (SELECT at.article_id
                               FROM article_tags at
                               WHERE FIND_IN_SET(at.tag_id, tagIds)
@@ -314,9 +311,9 @@ from articles;
 SELECT article_count
 FROM article_count_view;
 
--- 创建存储过程：
--- 根据搜索关键字查询文章列表
--- 进行分页
+-- Create stored procedure:
+-- Search article list based on a search keyword
+-- With pagination
 DROP PROCEDURE IF EXISTS SearchArticlesWithPaging;
 DELIMITER //
 
@@ -350,10 +347,10 @@ DELIMITER ;
 CALL SearchArticlesWithPaging('章', 1, 5, @totalPageCount);
 SELECT @totalPageCount;
 
--- 存储过程：
--- 新建文章
--- 新的标题，新的内容，上传者user_id
--- 输出新文章的id
+-- Create stored procedure:
+-- Create new article
+-- New title, new content, uploader's user_id
+-- Output the new article's id
 DROP PROCEDURE IF EXISTS CreateArticle;
 DELIMITER //
 
@@ -374,15 +371,15 @@ END //
 
 DELIMITER ;
 
-CALL CreateArticle('文章14', '新内容', 2, @new_article_id);
+CALL CreateArticle('Article 14', 'New content', 2, @new_article_id);
 SELECT @new_article_id;
 
--- 存储过程：
--- 更新文章
--- 根据文章id，更新文章的标题和内容，新的上传者user_id
--- 如果文章不存在，output 错误信息
--- 如果上传者不是文章的作者，添加为新的作者，output 提示信息
--- 如果上传者是文章的作者，output 提示信息
+-- Create stored procedure:
+-- Update article
+-- Based on article id, update article's title and content, new uploader's user_id
+-- If the article does not exist, output error message
+-- If the uploader is not already an author, add as a new author, output message
+-- If the uploader is already an author, output message
 
 DROP PROCEDURE IF EXISTS UpdateArticle;
 DELIMITER //
@@ -396,26 +393,26 @@ CREATE PROCEDURE UpdateArticle(
 )
 proc:
 BEGIN
-    -- 检查文章是否存在
+    -- Check if the article exists
     IF NOT EXISTS (SELECT 1
                    FROM articles
                    WHERE article_id = article) THEN
         SET message = 'Article does not exist';
-        LEAVE proc; -- 指定离开的标签
+        LEAVE proc; -- specify the label to leave
     END IF;
 
-    -- 更新文章标题和内容
+    -- Update article title and content
     UPDATE articles
     SET title   = new_title,
         content = new_content
     WHERE article_id = article;
 
-    -- 检查上传者是否已经是文章的作者
+    -- Check if the uploader is already an article's author
     IF NOT EXISTS (SELECT 1
                    FROM article_authors
                    WHERE article_id = article
                      AND user_id = author_id) THEN
-        -- 如果不是，添加为新的作者
+        -- If not, add as a new author
         INSERT INTO article_authors (article_id, user_id)
         VALUES (article, author_id);
         SET message = 'Success updated with new author';
@@ -426,13 +423,13 @@ END proc //
 
 DELIMITER ;
 
--- 测试调用存储过程
-CALL UpdateArticle(13, '更新后的标题', '更新后的内容', 4, @message);
+-- Test call to stored procedure
+CALL UpdateArticle(13, 'Updated title', 'Updated content', 4, @message);
 SELECT @message;
 
--- 存储过程：
--- 删除文章
--- 返回message，文章不存在，无法删除，否则删除成功
+-- Create stored procedure:
+-- Delete article
+-- Return message, if article does not exist, cannot delete, otherwise success
 DROP PROCEDURE IF EXISTS DeleteArticle;
 DELIMITER //
 
@@ -456,10 +453,9 @@ DELIMITER ;
 CALL DeleteArticle(2, @message);
 SELECT @message;
 
-
--- 存储过程：
--- 为文章更新标签
--- 输入文章id，增加的标签id列表，删除的标签id列表
+-- Create stored procedure:
+-- Update tags for an article
+-- Input article id, list of tag ids to add, list of tag ids to remove
 DROP PROCEDURE IF EXISTS UpdateArticleTags;
 DELIMITER //
 
@@ -469,7 +465,7 @@ CREATE PROCEDURE UpdateArticleTags(
     IN remove_tag_ids VARCHAR(255)
 )
 BEGIN
-    -- 删除标签
+    -- Delete tags
     IF remove_tag_ids IS NOT NULL THEN
         DELETE FROM article_tags
         WHERE article_id = curr_article_id
@@ -478,7 +474,7 @@ BEGIN
                          WHERE FIND_IN_SET(tag_id, remove_tag_ids));
     END IF;
 
-    -- 添加标签
+    -- Add tags
     IF add_tag_ids IS NOT NULL THEN
         INSERT INTO article_tags (article_id, tag_id)
         SELECT curr_article_id, tag_id
@@ -488,7 +484,6 @@ BEGIN
 END //
 
 DELIMITER ;
-
 
 select * from article_tags where article_id = 1;
 CALL UpdateArticleTags(1, '3,4', '1');

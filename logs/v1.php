@@ -32,20 +32,15 @@ function aggregateStats($logEntries) {
     return $dailyVisits;
 }
 
-// 读取并解析日志
 $articleLogs = parseLogFile(ARTICLE_LOG_PATH);
 $userLogs = parseLogFile(USER_LOG_PATH);
 
-// 合并日志
 $combinedLogs = array_merge($articleLogs, $userLogs);
 
-// 聚合统计数据
 $dailyVisits = aggregateStats($combinedLogs);
 
-// 对日访问次数进行降序排序
 arsort($dailyVisits);
 
-// 输出结果
 foreach ($dailyVisits as $date => $count) {
     echo "Date: $date - Visits: $count<br>";
 }
