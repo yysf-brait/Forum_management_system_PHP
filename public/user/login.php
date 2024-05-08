@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,7 +42,7 @@
 
         input[type="text"],
         input[type="password"] {
-            width: 100%; /* 宽度调整为100%填充父容器 */
+            width: 100%;
             padding: 10px;
             margin-top: 5px;
             border: 1px solid #ccc;
@@ -62,23 +62,23 @@
 
         .captcha-group input {
             flex-grow: 2;
-            margin-left: 10px; /* 调整此值以增加间距 */
+            margin-left: 10px;
         }
 
         .captcha-group img {
             flex-grow: 1;
             cursor: pointer;
-            height: 38px; /* 调整图片大小以适应输入框高度 */
+            height: 38px;
             margin-left: 5px;
         }
 
         .captcha-hint {
-            font-size: 0.7em; /* 减小字体大小 */
+            font-size: 0.7em;
             color: #666;
             text-align: center;
-            margin-top: 0; /* 减少上边距 */
-            margin-bottom: 2px; /* 减少下边距 */
-            line-height: 0.6; /* 调整行高 */
+            margin-top: 0;
+            margin-bottom: 2px;
+            line-height: 0.6;
         }
 
         button {
@@ -107,30 +107,30 @@
 <body>
 <form action="../../src/login.php" method="POST">
     <div class="form-header">
-        <h2>用户登录</h2>
+        <h2>User Login</h2>
         <?php
         if (isset($_GET['error'])) {
             if ($_GET['error'] == 'invalid') {
-                echo '<p class="error">用户名或密码错误，请重试。</p>';
+                echo '<p class="error">Invalid username or password, please try again.</p>';
             } else if ($_GET['error'] == 'captcha') {
-                echo '<p class="error">验证码错误，请重试。</p>';
+                echo '<p class="error">Incorrect captcha, please try again.</p>';
             }
         }
         ?>
     </div>
-    <label>用户名:<input type="text" name="username" value="<?php echo htmlspecialchars($_COOKIE['username'] ?? ''); ?>"
+    <label>Username:<input type="text" name="username" value="<?php echo htmlspecialchars($_COOKIE['username'] ?? ''); ?>"
                          required></label>
-    <label>密码:<input type="password" name="password" required></label>
+    <label>Password:<input type="password" name="password" required></label>
     <div class="captcha-group">
-        <label>验证码:<input type="text" name="captcha" required style="width: 60%;"></label>
-        <img src="../../src/captcha.php" alt="点击刷新验证码" id="captcha_image" onclick="refreshCaptcha();"
-             title="点击刷新验证码"
+        <label>Captcha:<input type="text" name="captcha" required style="width: 60%;"></label>
+        <img src="../../src/captcha.php" alt="Click to refresh captcha" id="captcha_image" onclick="refreshCaptcha();"
+             title="Click to refresh captcha"
              style="width: 30%; height: 38px; margin-left: 5px;">
     </div>
-    <p class="captcha-hint">点击图片刷新验证码</p>
-    <button type="submit">登录</button>
-    <button type="button" onclick="window.location='register.php';">注册新账户</button>
-    <a href="reset_password.php">忘记密码？</a>
+    <p class="captcha-hint">Click the image to refresh captcha</p>
+    <button type="submit">Login</button>
+    <button type="button" onclick="window.location='register.php';">Register a New Account</button>
+    <a href="reset_password.php">Forgot Password?</a>
 </form>
 
 <script>

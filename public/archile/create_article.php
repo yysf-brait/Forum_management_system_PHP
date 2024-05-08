@@ -2,10 +2,10 @@
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>创建文章</title>
+    <title>Create Article</title>
     <link rel="stylesheet" href="../css/styles1.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -18,16 +18,16 @@ session_start();
     endif; ?>
 </div>
 <div class="container">
-    <h1>创建新文章</h1>
+    <h1>Create New Article</h1>
     <div>
-        <label for="title">标题:</label>
+        <label for="title">Title:</label>
         <input type="text" id="title" name="title" required>
     </div>
     <div>
-        <label for="content">内容:</label>
+        <label for="content">Content:</label>
         <textarea id="content" name="content" required></textarea>
     </div>
-    <button type="button" onclick="submitArticle()">提交文章</button>
+    <button type="button" onclick="submitArticle()">Submit Article</button>
 </div>
 
 <script>
@@ -35,15 +35,15 @@ function submitArticle() {
     var title = document.getElementById('title').value.trim();
     var content = document.getElementById('content').value.trim();
 
-    // 进行输入验证
+    // Validate inputs
     if (!title || !content) {
-        alert('标题和内容不能为空');
+        alert('Title and content cannot be empty');
         return;
     }
 
     // console.log('Creating article:', title, content);
 
-    // 构建GET请求的URL
+    // Build the GET request URL
     var url = new URL('../../src/api/create_article.php', window.location.origin);
     url.searchParams.append('title', title);
     url.searchParams.append('content', content);
@@ -51,15 +51,15 @@ function submitArticle() {
     axios.get(url.toString())
     .then(function (response) {
         if (response.data.success) {
-            alert('文章创建成功！');
+            alert('Article created successfully!');
             window.location.href = 'article.php?id=' + response.data.new_article_id;
         } else {
-            alert('创建文章失败：' + response.data.message);
+            alert('Failed to create article: ' + response.data.message);
         }
     })
     .catch(function (error) {
         console.error('Error creating the article:', error);
-        alert('创建文章时发生错误');
+        alert('An error occurred while creating the article');
     });
 }
 </script>

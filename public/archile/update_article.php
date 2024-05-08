@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>编辑文章</title>
+    <title>Edit Article</title>
     <link rel="stylesheet" href="../css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <div class="container">
-    <h1>编辑文章</h1>
+    <h1>Edit Article</h1>
     <form id="updateArticleForm" onsubmit="submitUpdate(); return false;">
         <input type="hidden" name="article_id" id="articleId">
         <div>
-            <label for="title">标题:</label>
-            <input type="text" id="title" name="title" placeholder="文章标题">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" placeholder="Article Title">
         </div>
         <div>
-            <label for="content">内容:</label>
-            <textarea id="content" name="content" placeholder="文章内容"></textarea>
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" placeholder="Article Content"></textarea>
         </div>
-        <button type="submit">提交更改</button>
+        <button type="submit">Submit Changes</button>
     </form>
 </div>
 
@@ -27,16 +27,16 @@
     document.addEventListener('DOMContentLoaded', function () {
         const articleId = <?php echo $_POST['article_id'] ?? 0; ?>;
         if (!articleId) {
-            alert('错误：文章ID缺失。');
+            alert('Error: Article ID is missing.');
             // back to the previous page
             window.history.back();
             return;
         }
 
-        // 填充文章ID到隐藏字段
+        // Fill article ID into hidden field
         document.getElementById('articleId').value = articleId;
 
-        // 获取文章的详细信息并填充到表单中
+        // Fetch article details and fill them into the form
         fetch(`../../src/api/article.php?id=${articleId}`)
             .then(response => response.json())
             .then(data => {
@@ -44,17 +44,17 @@
                     document.getElementById('title').value = data.article.title;
                     document.getElementById('content').value = data.article.content;
                 } else {
-                    alert(data.message || '获取文章详情失败');
+                    alert(data.message || 'Failed to fetch article details');
                 }
             })
             .catch(error => {
-                console.error('获取文章详情失败:', error);
-                alert('获取文章详情时发生错误');
+                console.error('Failed to fetch article details:', error);
+                alert('An error occurred while fetching article details');
             });
     });
 
     function submitUpdate() {
-        // 构建GET请求的URL
+        // Build GET request URL
         var url = new URL('../../src/api/update_article.php', window.location.origin);
         url.searchParams.append('article_id', document.getElementById('articleId').value);
         url.searchParams.append('title', document.getElementById('title').value);
@@ -71,8 +71,8 @@
                 }
             })
             .catch(error => {
-                console.error('更新文章失败:', error);
-                alert('更新文章时发生错误');
+                console.error('Failed to update article:', error);
+                alert('An error occurred while updating the article');
             });
         return false; // Prevent default form submission
     }

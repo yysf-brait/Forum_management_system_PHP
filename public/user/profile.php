@@ -2,23 +2,22 @@
 session_start();
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    // 用户未登录，跳转到登录页面
+    // User not logged in, redirect to login page
     header("Location: login.php");
     exit;
 }
 
+include '../../src/config.php';  // Include database configuration
+global $conn;  // Use global variable
 
-include '../../src/config.php';  // 引入数据库配置
-global $conn;  // 使用全局变量
-
-// 检查连接
+// Check connection
 if ($conn->connect_error) {
-    die("连接失败: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$username = $_SESSION['username'];  // 假设用户名已经保存在Session中
+$username = $_SESSION['username'];  // Assume username is already saved in the session
 
-// 准备SQL语句
+// Prepare SQL statement
 $sql = "SELECT username, email, is_admin, created_at FROM users WHERE username = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username);
@@ -27,10 +26,10 @@ $stmt->bind_result($username, $email, $is_admin, $created_at);
 $stmt->fetch();
 ?>
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>用户资料</title>
+    <title>User Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -75,16 +74,16 @@ $stmt->fetch();
 </head>
 <body>
 <div class="profile">
-    <p class="welcome">欢迎回来，<?php echo htmlspecialchars($username); ?></p>
-    <h1>用户资料</h1>
-    <p>用户名: <?php echo htmlspecialchars($username); ?></p>
-    <p>邮箱: <?php echo htmlspecialchars($email); ?></p>
-    <p>注册时间: <?php echo $created_at; ?></p>
-    <p>身份: <?php echo $is_admin ? '管理员' : '普通用户'; ?></p>
-    <a href="edit_profile.php">编辑资料</a>
-    <a href="../../src/logout.php">登出</a>
+    <p class="welcome">Welcome back, <?php echo htmlspecialchars($username); ?></p>
+    <h1>User Profile</h1>
+    <p>Username: <?php echo htmlspecialchars($username); ?></p>
+    <p>Email: <?php echo htmlspecialchars($email); ?></p>
+    <p>Registration Time: <?php echo $created_at; ?></p>
+    <p>Role: <?php echo $is_admin ? 'Administrator' : 'Regular User'; ?></p>
+    <a href="edit_profile.php">Edit Profile</a>
+    <a href="../../src/logout.php">Log Out</a>
     <?php if ($is_admin): ?>
-        <a href="../../logs/view.php">查看日志</a>
+        <a href="../../logs/view.php">View Logs</a>
     <?php endif; ?>
 </div>
 </body>

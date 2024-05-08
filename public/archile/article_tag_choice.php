@@ -1,32 +1,32 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>编辑文章标签</title>
+    <title>Edit Article Tags</title>
     <link rel="stylesheet" href="../css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <div class="container">
-    <h1>编辑文章标签</h1>
+    <h1>Edit Article Tags</h1>
     <div id="tags-container"></div>
-    <button onclick="updateArticleTags()">更新标签</button>
+    <button onclick="updateArticleTags()">Update Tags</button>
 </div>
 
 <div id="add-tag-form">
-    <label for="newTagName"></label><input type="text" id="newTagName" placeholder="输入新标签名">
-    <button onclick="addNewTag()">添加新标签</button>
+    <label for="newTagName"></label><input type="text" id="newTagName" placeholder="Enter new tag name">
+    <button onclick="addNewTag()">Add New Tag</button>
 </div>
 
 
 <script>
     const articleId = <?php echo $_POST['article_id'] ?? 0; ?>;
-    let initialSelectedTags = new Set();  // 初始已选中的标签
-    let selectedTags = new Set();         // 当前已选中的标签
-    let addTags = new Set();              // 要添加的标签
-    let removeTags = new Set();           // 要删除的标签
+    let initialSelectedTags = new Set();  // Initially selected tags
+    let selectedTags = new Set();         // Currently selected tags
+    let addTags = new Set();              // Tags to be added
+    let removeTags = new Set();           // Tags to be removed
 
-    // 加载标签并标记已选中的
+    // Load tags and mark those already selected
     function loadTags() {
         axios.get('../../src/api/tags.php')
             .then(function (response) {
@@ -35,7 +35,7 @@
                 container.innerHTML = '';
                 axios.get(`../../src/api/get_article_tags.php?article_id=${articleId}`)
                     .then(res => {
-                        const activeTags = res.data.tags.map(tag => tag.tag_id); // 获取此文章已有的标签
+                        const activeTags = res.data.tags.map(tag => tag.tag_id); // Get tags already associated with this article
 
                         tags.forEach(tag => {
                             const tagElement = document.createElement('button');
@@ -64,11 +64,11 @@
                         });
                     })
                     .catch(error => {
-                        console.error('加载文章标签失败:', error);
+                        console.error('Failed to load article tags:', error);
                     });
             })
             .catch(function (error) {
-                console.error('加载所有标签失败:', error);
+                console.error('Failed to load all tags:', error);
             });
     }
 
@@ -90,7 +90,7 @@
         }
     }
 
-    // 更新文章标签
+    // Update article tags
     function updateArticleTags() {
         const formData = new FormData();
         formData.append('article_id', articleId);
@@ -99,36 +99,36 @@
 
         axios.post('../../src/api/article_tag.php', formData)
             .then(function (response) {
-                alert('标签更新成功');
-                // 重置初始选中状态和集合
+                alert('Tags updated successfully');
+                // Reset the initial selected state and sets
                 initialSelectedTags = new Set([...selectedTags]);
                 addTags.clear();
                 removeTags.clear();
             })
             .catch(function (error) {
-                console.error('更新标签失败:', error);
+                console.error('Failed to update tags:', error);
             });
     }
 
     function addNewTag() {
     const tagName = document.getElementById('newTagName').value.trim();
     if (!tagName) {
-        alert('标签名不能为空！');
+        alert('The tag name cannot be empty!');
         return;
     }
     const url = `../../src/api/add_tag.php?name=${encodeURIComponent(tagName)}&article_id=${encodeURIComponent(articleId)}`;
     axios.get(url)
     .then(response => {
         if (response.data.success) {
-            alert('新标签添加成功！');
-            document.getElementById('newTagName').value = ''; // 清空输入框
-            loadTags(); // 重新加载标签
+            alert('New tag added successfully!');
+            document.getElementById('newTagName').value = ''; // Clear the input field
+            loadTags(); // Reload tags
         } else {
-            alert('添加新标签失败: ' + response.data.message);
+            alert('Failed to add new tag: ' + response.data.message);
         }
     })
     .catch(error => {
-        console.error('添加新标签失败:', error);
+        console.error('Failed to add new tag:', error);
     });
 }
 

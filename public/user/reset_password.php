@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>重置密码</title>
+    <title>Reset Password</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -19,7 +19,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px; /* 固定表单宽度 */
+            width: 300px; /* Fixed form width */
             transition: box-shadow 0.3s;
         }
         form:hover {
@@ -28,7 +28,7 @@
         h2 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px; /* 增加与表单元素的间距 */
+            margin-bottom: 20px; /* Increase spacing from form elements */
         }
         .error {
             color: #D8000C;
@@ -47,7 +47,7 @@
         input[type="text"],
         input[type="password"],
         input[type="email"] {
-            width: 100%; /* 宽度调整为100%填充父容器 */
+            width: 100%; /* Width adjusted to 100% to fill parent container */
             padding: 12px;
             margin-top: 6px;
             border: 1px solid #ccc;
@@ -83,34 +83,34 @@
 </head>
 <body>
 <form action="../../src/reset_password.php" method="POST">
-    <h2>重置密码</h2>
+    <h2>Reset Password</h2>
     <?php
     if (isset($_GET['error'])) {
         switch ($_GET['error']) {
             case 'password_not_strong':
-                echo '<p class="error">密码长度至少8个字符<br>且必须包含字母和数字</p>';
+                echo '<p class="error">Password must be at least 8 characters long<br>and must include letters and numbers.</p>';
                 break;
             case 'username_not_found':
-                echo '<p class="error">用户名不存在，请重试。</p>';
+                echo '<p class="error">Username not found, please try again.</p>';
                 break;
             case 'reset_failed':
-                echo '<p class="error">密码重置失败，请重试。</p>';
+                echo '<p class="error">Password reset failed, please try again.</p>';
                 break;
             case 'sql_error':
-                echo '<p class="error">数据库错误，请联系管理员。</p>';
+                echo '<p class="error">Database error, please contact the administrator.</p>';
                 break;
         }
     }
     ?>
     <label>
-        用户名:
+        Username:
         <input type="text" name="username" required>
     </label>
     <label>
-        新密码:
+        New Password:
         <input type="password" name="new_password" required>
     </label>
-    <button type="submit">重置密码</button>
+    <button type="submit">Reset Password</button>
 </form>
 </body>
 </html>

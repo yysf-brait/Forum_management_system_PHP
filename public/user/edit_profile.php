@@ -1,10 +1,10 @@
 <?php
 session_start();
-include '../../src/config.php';  // 引入数据库配置
-global $conn;  // 使用全局变量
+include '../../src/config.php';  // Include database configuration
+global $conn;  // Use global variable
 
 if (!isset($_SESSION['username'])) {
-    // 如果没有登录，重定向到登录页面
+    // If not logged in, redirect to the login page
     header("Location: login.php");
     exit;
 }
@@ -13,23 +13,23 @@ $username = $_SESSION['username'];
 $current_username = '';
 $current_email = '';
 
-// 准备SQL语句查询当前用户信息
+// Prepare SQL statement to query current user information
 $query = "SELECT username, email FROM users WHERE username = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $stmt->bind_result($current_username, $current_email);
 if (!$stmt->fetch()) {
-    echo "<p>没有找到用户信息。</p>"; // 适当处理用户不存在的情况
+    echo "<p>User information not found.</p>"; // Appropriately handle the case where the user does not exist
 }
 $stmt->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>编辑用户资料</title>
+    <title>Edit User Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -88,13 +88,13 @@ $stmt->close();
 </head>
 <body>
     <form action="../../src/update_profile.php" method="POST">
-        <h2>编辑用户资料</h2>
+        <h2>Edit User Profile</h2>
         <?php
         if (isset($_GET['error'])) {
             $errorMessages = [
-                'username_too_short' => '用户名长度至少需要5个字符。',
-                'username_taken' => '该用户名已被其他用户使用，请选择其他用户名。',
-                'invalid_email' => '邮箱格式不正确。'
+                'username_too_short' => 'Username must be at least 5 characters long.',
+                'username_taken' => 'This username is already taken, please choose another one.',
+                'invalid_email' => 'Invalid email format.'
             ];
             if (array_key_exists($_GET['error'], $errorMessages)) {
                 echo '<p class="error">' . $errorMessages[$_GET['error']] . '</p>';
@@ -102,14 +102,14 @@ $stmt->close();
         }
         ?>
         <label>
-            用户名（如需修改）:
+            Username (if changing):
             <input type="text" name="new_username" value="<?php echo htmlspecialchars($current_username); ?>" required>
         </label>
         <label>
-            邮箱（如需修改）:
+            Email (if changing):
             <input type="email" name="new_email" value="<?php echo htmlspecialchars($current_email); ?>" required>
         </label>
-        <button type="submit">更新资料</button>
+        <button type="submit">Update Profile</button>
     </form>
 </body>
 </html>

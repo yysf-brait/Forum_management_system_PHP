@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>注册</title>
+    <title>Registration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,13 +20,13 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px; /* 固定表单宽度 */
+            width: 300px; /* Fixed form width */
         }
 
         .form-header, .error {
             text-align: center;
             color: #333;
-            margin-bottom: 20px; /* 增加与表单元素的间距 */
+            margin-bottom: 20px; /* Increase spacing from form elements */
         }
 
         .error {
@@ -43,12 +43,12 @@
         input[type="text"],
         input[type="password"],
         input[type="email"] {
-            width: 100%; /* 宽度调整为100%填充父容器 */
+            width: 100%; /* Width adjusted to 100% to fill parent container */
             padding: 10px;
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* 确保padding不会影响输入框大小 */
+            box-sizing: border-box; /* Ensures padding does not affect input size */
         }
 
         button {
@@ -70,42 +70,42 @@
 <body>
 <form action="../../src/register.php" method="POST">
     <div class="form-header">
-        <h2>用户注册</h2>
+        <h2>User Registration</h2>
         <?php
         if (isset($_GET['error'])) {
             switch ($_GET['error']) {
                 case 'username_too_short':
-                    echo '<p class="error">用户名长度至少5个字符。</p>';
+                    echo '<p class="error">Username must be at least 5 characters long.</p>';
                     break;
                 case 'password_not_strong':
-                    echo '<p class="error">密码长度至少8个字符<br>且必须包含字母和数字</p>';
+                    echo '<p class="error">Password must be at least 8 characters long<br>and must include letters and numbers.</p>';
                     break;
                 case 'invalid_email':
-                    echo '<p class="error">邮箱格式无效。</p>';
+                    echo '<p class="error">Invalid email format.</p>';
                     break;
                 case 'username_exists':
-                    echo '<p class="error">用户名已存在。</p>';
+                    echo '<p class="error">Username already exists.</p>';
                     break;
                 case 'unknown_error':
-                    echo '<p class="error">未知错误。</p>';
+                    echo '<p class="error">Unknown error.</p>';
                     break;
 
             }
         }
         ?>    </div>
     <label>
-        用户名:
+        Username:
         <input type="text" name="username" required>
     </label>
     <label>
-        密码:
+        Password:
         <input type="password" name="password" required>
     </label>
     <label>
-        邮箱:
+        Email:
         <input type="email" name="email" required>
     </label>
-    <button type="submit">注册</button>
+    <button type="submit">Register</button>
 </form>
 </body>
 </html>

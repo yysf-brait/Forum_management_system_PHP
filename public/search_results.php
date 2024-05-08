@@ -2,10 +2,10 @@
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>搜索文章</title>
+    <title>Search Articles</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -14,32 +14,33 @@ session_start();
     <?php if (isset($_SESSION['username'])): ?>
         <a href="user/profile.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
     <?php else: ?>
-        <a href="user/login.php">登录</a>
+        <a href="user/login.php">Login</a>
     <?php endif; ?>
 </div>
 <div class="search-container">
-    <label for="searchQueryInput"></label><input type="text" id="searchQueryInput" placeholder="搜索文章标题...">
-    <button onclick="reSearchArticles()">搜索</button>
+    <label for="searchQueryInput"></label><input type="text" id="searchQueryInput"
+                                                 placeholder="Search article titles...">
+    <button onclick="reSearchArticles()">Search</button>
 </div>
 <div class="container">
     <ul id="articlesList" class="list-group">
-        <!-- 搜索结果将在这里显示 -->
+        <!-- Search results will be displayed here -->
     </ul>
 </div>
 <div class="pagination-controls">
-    <button id="prevPage">上一页</button>
+    <button id="prevPage">Previous Page</button>
     <span id="currentPageDisplay"></span>
-    <button id="nextPage">下一页</button>
-    <span>每页显示：</span>
+    <button id="nextPage">Next Page</button>
+    <span>Items per page:</span>
     <label for="pageSizeSelect"></label><select id="pageSizeSelect">
-        <option value="5">5条</option>
-        <option value="10" selected>10条</option>
-        <option value="15">15条</option>
-        <option value="20">20条</option>
+        <option value="5">5 items</option>
+        <option value="10" selected>10 items</option>
+        <option value="15">15 items</option>
+        <option value="20">20 items</option>
     </select>
-    <span>跳转到页码:</span>
+    <span>Jump to page:</span>
     <label for="pageInput"></label><input type="number" id="pageInput" min="1" style="width: 50px;">
-    <button onclick="jumpToPage()">跳转</button>
+    <button onclick="jumpToPage()">Jump</button>
 </div>
 
 <script>
@@ -47,24 +48,24 @@ session_start();
     var pageSize = 10;
     var totalPages = 0;
 
-    document.getElementById('pageSizeSelect').addEventListener('change', function() {
+    document.getElementById('pageSizeSelect').addEventListener('change', function () {
         pageSize = parseInt(this.value);
-        searchArticles();  // 重新搜索并重置页码
+        searchArticles();  // Re-search and reset page number
     });
 
     document.getElementById('prevPage').addEventListener('click', function () {
-            if (currentPage > 1) {
-                loadArticles(--currentPage);
-            }
-            searchArticles();
-        });
+        if (currentPage > 1) {
+            loadArticles(--currentPage);
+        }
+        searchArticles();
+    });
 
     document.getElementById('nextPage').addEventListener('click', function () {
-            if (currentPage < totalPages) {
-                loadArticles(++currentPage);
-            }
-            searchArticles();
-        });
+        if (currentPage < totalPages) {
+            loadArticles(++currentPage);
+        }
+        searchArticles();
+    });
 
     function searchArticles() {
         var query = document.getElementById('searchQueryInput').value;
@@ -78,14 +79,14 @@ session_start();
 
     function loadArticles(query, page) {
         axios.get(`../src/api/search_articles.php`, {
-            params: { query: query, pageNum: page, pageSize: pageSize }
+            params: {query: query, pageNum: page, pageSize: pageSize}
         }).then(function (response) {
             const articlesList = document.getElementById('articlesList');
-            articlesList.innerHTML = '';  // 清空列表
+            articlesList.innerHTML = '';  // Clear the list
             response.data.articles.forEach(article => {
                 const li = document.createElement('li');
                 li.className = 'list-group-item';
-                li.innerHTML = `<strong><a href="archile/article.php?id=${article.article_id}">${article.title}</a></strong> - 更新日期：${article.updated_at}<br>创建日期: ${article.created_at}<br>作者: ${article.authors || '未知'}<br>标签: ${article.tags || '无'}`;
+                li.innerHTML = `<strong><a href="archile/article.php?id=${article.article_id}">${article.title}</a></strong> - Updated date: ${article.updated_at}<br>Creation date: ${article.created_at}<br>Author: ${article.authors || 'Unknown'}<br>Tags: ${article.tags || 'None'}`;
                 articlesList.appendChild(li);
             });
             totalPages = Math.ceil(response.data.total / pageSize);
@@ -97,14 +98,14 @@ session_start();
 
     function updatePaginationDisplay() {
         const currentPageDisplay = document.getElementById('currentPageDisplay');
-        currentPageDisplay.textContent = `第 ${currentPage} 页，共 ${totalPages} 页`;
+        currentPageDisplay.textContent = `Page ${currentPage} of ${totalPages}`;
     }
 
     function jumpToPage() {
         var page = parseInt(document.getElementById('pageInput').value);
         if (page > 0 && page <= totalPages) {
             currentPage = page;
-            searchArticles();  // 重新加载指定页码的文章
+            searchArticles();  // Reload articles for the specified page
         }
     }
 </script>
