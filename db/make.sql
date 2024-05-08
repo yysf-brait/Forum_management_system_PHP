@@ -52,49 +52,49 @@ CREATE TABLE article_authors
 );
 
 insert into articles (title, content)
-values ('文章1', '内容1234567890');
+values ('article1', 'a1234567890');
 insert into article_authors (article_id, user_id)
 values (1, 1);
 insert into articles (title, content)
-values ('文章2', '内容12345678901');
+values ('article2', 'a12345678901');
 insert into article_authors (article_id, user_id)
 values (2, 1);
 insert into articles (title, content)
-values ('文章3', '内容12345678902');
+values ('article3', 'a12345678902');
 insert into article_authors (article_id, user_id)
 values (3, 1);
 insert into articles (title, content)
-values ('文章4', '内容12345678903');
+values ('article4', 'a12345678903');
 insert into article_authors (article_id, user_id)
 values (4, 2);
 insert into articles (title, content)
-values ('文章5', '内容12345678904');
+values ('article5', 'a12345678904');
 insert into article_authors (article_id, user_id)
 values (5, 1);
 insert into article_authors (article_id, user_id)
 values (5, 2);
 insert into articles (title, content)
-values ('文章6', '内容12345678905');
+values ('article6', 'a12345678905');
 insert into articles (title, content)
-values ('文章7', '内容12345678906');
+values ('article7', 'a12345678906');
 insert into articles (title, content)
-values ('文章8', '内容12345678907');
+values ('article8', 'a12345678907');
 insert into articles (title, content)
-values ('文章9', '内容12345678908');
+values ('article9', 'a12345678908');
 insert into articles (title, content)
-values ('文章10', '内容12345678909');
+values ('article10', 'a12345678909');
 insert into articles (title, content)
-values ('文章11', '内容12345678910');
+values ('article11', 'a12345678910');
 insert into articles (title, content)
-values ('文章12', '内容12345678911');
+values ('article12', 'a12345678911');
 insert into tags (tag_name)
-values ('标签1');
+values ('tag1');
 insert into tags (tag_name)
-values ('标签2');
+values ('tag2');
 insert into tags (tag_name)
-values ('标签3');
+values ('tag3');
 insert into tags (tag_name)
-values ('标签4');
+values ('tag4');
 insert into article_tags (article_id, tag_id)
 values (1, 1);
 insert into article_tags (article_id, tag_id)
