@@ -1,6 +1,5 @@
 <?php
-include '../config.php'; // 确保包含了数据库连接配置
-global $conn;
+include '../config.php'; global $conn;
 
 $tagName = $_GET['name'] ?? '';
 $articleId = $_GET['article_id'] ?? 0;
@@ -11,14 +10,11 @@ if (empty($tagName)) {
 }
 
 try {
-    // 插入新标签
-    $stmt = $conn->prepare("INSERT INTO tags (tag_name) VALUES (?)");
+        $stmt = $conn->prepare("INSERT INTO tags (tag_name) VALUES (?)");
     $stmt->bind_param("s", $tagName);
     $stmt->execute();
-    $tagId = $conn->insert_id; // 获取新插入标签的ID
-
-    // 将新标签关联到文章
-    $stmt = $conn->prepare("INSERT INTO article_tags (article_id, tag_id) VALUES (?, ?)");
+    $tagId = $conn->insert_id; 
+        $stmt = $conn->prepare("INSERT INTO article_tags (article_id, tag_id) VALUES (?, ?)");
     $stmt->bind_param("ii", $articleId, $tagId);
     $stmt->execute();
 

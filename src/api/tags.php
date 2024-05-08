@@ -1,9 +1,7 @@
 <?php
-// src/api/tags.php
 header('Content-Type: application/json');
 
-include '../config.php';  // 引入数据库配置文件
-global $conn;
+include '../config.php';  global $conn;
 
 $query = "SELECT * FROM tag_article_count_view;";
 $result = $conn->query($query);

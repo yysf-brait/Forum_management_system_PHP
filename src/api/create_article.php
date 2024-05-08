@@ -1,9 +1,7 @@
 <?php
 session_start();
-header('Content-Type: application/json');  // 设置响应类型为JSON
-
-include '../config.php';  // 引入数据库配置文件
-global $conn;
+header('Content-Type: application/json');  
+include '../config.php';  global $conn;
 
 $title = $_GET['title'] ?? '';
 $content = $_GET['content'] ?? '';
@@ -19,7 +17,6 @@ if (!$author_id) {
     exit;
 }
 
-// 准备调用存储过程
 $stmt = $conn->prepare("CALL CreateArticle(?, ?, ?, @new_article_id)");
 $stmt->bind_param("ssi", $title, $content, $author_id);
 $success = $stmt->execute();
@@ -32,8 +29,7 @@ if ($success) {
     $row = $result->fetch_assoc();
     echo json_encode(['success' => true, 'message' => 'article created successfully', 'new_article_id' => $row['new_article_id']]);
 
-    // 日志
-    date_default_timezone_set('Asia/Shanghai');
+        date_default_timezone_set('Asia/Shanghai');
     $time_stamp = date("Y-m-d H:i:s");
     $log_message = "User:$author_id Article:{$row['new_article_id']} AT:$time_stamp Action:Create\n";
     file_put_contents("../../logs/article_logs.txt", $log_message, FILE_APPEND);

@@ -3,8 +3,7 @@ session_start();
 
 header('Content-Type: application/json');
 
-include '../config.php';  // 引入数据库配置文件
-global $conn;
+include '../config.php';  global $conn;
 
 $pageNum = isset($_GET['pageNum']) ? (int)$_GET['pageNum'] : 1;
 $pageSize = isset($_GET['pageSize']) ? (int)$_GET['pageSize'] : 10;
@@ -39,9 +38,7 @@ while ($row = $result->fetch_assoc()) {
 }
 
 if (!empty($tagIds)) {
-    $stmt->next_result(); // 移动到下一个结果集
-    $stmt->store_result(); // 存储剩余的结果集以清除额外的数据
-    $stmt = $conn->prepare("SELECT @total AS totalArticles;");
+    $stmt->next_result();     $stmt->store_result();     $stmt = $conn->prepare("SELECT @total AS totalArticles;");
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();

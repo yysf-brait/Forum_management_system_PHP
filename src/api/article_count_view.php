@@ -1,9 +1,7 @@
 <?php
-// src/api/article_count_view.php
 header('Content-Type: application/json');
 
-include '../config.php';  // 引入数据库配置文件
-
+include '../config.php';  
 global $conn;
 
 if ($conn->connect_error) {

@@ -1,12 +1,9 @@
 <?php
 session_start();
-include '../config.php';  // 引入数据库配置文件
-global $conn;
+include '../config.php';  global $conn;
 
 $response = ['success' => false];
-$user = $_SESSION['user_id'] ?? null;  // 获取当前登录用户ID
-$article_id = $_GET['id'] ?? 0;  // 从URL参数获取文章ID
-
+$user = $_SESSION['user_id'] ?? null;  $article_id = $_GET['id'] ?? 0;  
 if ($article_id == 0) {
     $response['message'] = 'article_id is required';
     echo json_encode($response);
@@ -26,7 +23,6 @@ if (!$article) {
 }
 $response['success'] = true;
 $response['article'] = $article;
-// 日志
 if (!isset($_SESSION['last_read_article_id']) || ($_SESSION['last_read_article_id'] != $article_id) || (time() - $_SESSION['last_read_article_time'] > 60)) {
     date_default_timezone_set('Asia/Shanghai');
     $time_stamp = date("Y-m-d H:i:s");
@@ -35,9 +31,7 @@ if (!isset($_SESSION['last_read_article_id']) || ($_SESSION['last_read_article_i
 }
 
 
-$_SESSION['last_read_article_id'] = $article_id;  // 记录最后阅读的文章ID
-$_SESSION['last_read_article_time'] = time();  // 记录最后阅读的时间戳
-echo json_encode($response);
+$_SESSION['last_read_article_id'] = $article_id;  $_SESSION['last_read_article_time'] = time();  echo json_encode($response);
 
 $stmt->close();
 $conn->close();
