@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <html lang='zh'>
             <head>
                 <meta charset='UTF-8'>
-                <title>注册成功</title>
+                <title>SUCCESS</title>
                 <meta http-equiv='refresh' content='3;url=../public/user/login.php'>
                 <style>
                     body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; padding-top: 50px; }
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </style>
             </head>
             <body>
-                <p class='message'>欢迎加入，{$username}！您将在3秒后跳转到登录页面...</p>
+                <p class='message'>Welcome, {$username}! Your account has been created successfully. Redirecting to login page...</p>
             </body>
             </html>";
             exit;

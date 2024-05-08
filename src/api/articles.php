@@ -26,7 +26,7 @@ if (!empty($tagIds)) {
 }
 
 if (!$stmt->execute()) {
-  echo "执行失败: (" . $stmt->errno . ") " . $stmt->error;
+  echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 }
 
 $result = $stmt->get_result();

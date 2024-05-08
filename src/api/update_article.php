@@ -6,13 +6,13 @@ global $conn;
 // 检查用户是否登录以及是否有更新文章的权限
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401); // Unauthorized
-    echo json_encode(['message' => '未登录，无法执行操作']);
+    echo json_encode(['message' => 'login required']);
     exit;
 }
 
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
     http_response_code(403); // Forbidden
-    echo json_encode(['message' => '非管理员用户无权执行此操作']);
+    echo json_encode(['message' => 'Access Denied: You are not an admin']);
     exit;
 }
 
@@ -24,7 +24,7 @@ $author_id = $_SESSION['user_id'];  // 假设登录用户为作者
 
 if (empty($title) || empty($content) || $article_id == 0) {
     http_response_code(400); // Bad Request
-    echo json_encode(['message' => '标题、内容和文章ID不能为空']);
+    echo json_encode(['message' => 'article_id, title and content are required']);
     exit;
 }
 
@@ -49,11 +49,11 @@ if ($stmt->execute()) {
         }
     } else {
         http_response_code(500); // Internal Server Error
-        echo json_encode(['message' => '更新文章时发生未知错误']);
+        echo json_encode(['message' => 'Internal Server Error: No message returned']);
     }
 } else {
     http_response_code(500); // Internal Server Error
-    echo json_encode(['message' => '无法执行更新操作：' . $stmt->error]);
+    echo json_encode(['message' => 'Internal Server Error: ' . $stmt->error]);
 }
 $stmt->close();
 $conn->close();

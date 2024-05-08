@@ -55,9 +55,9 @@ if ($result) {
     $time_stamp = date("Y-m-d H:i:s");
     $log_message = "User:$user_id Action:UpdateProfile AT:$time_stamp\n";
     file_put_contents("../logs/user.txt", $log_message, FILE_APPEND);
-    echo "<script>alert('用户资料已成功更新！'); window.location.href='../public/user/profile.php';</script>";
+    echo "<script>alert('profile updated successfully.'); window.location.href='../public/user/profile.php';</script>";
 } else {
-    echo "<script>alert('错误：无法更新资料。'); window.history.back();</script>";
+    echo "<script>alert('profile update failed.'); window.history.back();</script>";
 }
 
 // 关闭语句和连接

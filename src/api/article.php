@@ -8,7 +8,7 @@ $user = $_SESSION['user_id'] ?? null;  // 获取当前登录用户ID
 $article_id = $_GET['id'] ?? 0;  // 从URL参数获取文章ID
 
 if ($article_id == 0) {
-    $response['message'] = '无效的文章ID';
+    $response['message'] = 'article_id is required';
     echo json_encode($response);
     exit;
 }
@@ -20,7 +20,7 @@ $result = $stmt->get_result();
 $article = $result->fetch_assoc();
 
 if (!$article) {
-    $response['message'] = '文章不存在';
+    $response['message'] = 'article not found';
     echo json_encode($response);
     exit;
 }

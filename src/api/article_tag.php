@@ -15,13 +15,13 @@ $userId = $_SESSION['user_id'];
 // 检查是否为POST请求
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     http_response_code(405); // Method Not Allowed
-    echo json_encode(['message' => '只支持POST请求']);
+    echo json_encode(['message' => 'Request method must be POST']);
     exit;
 }
 
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
     http_response_code(403); // Forbidden
-    echo json_encode(['message' => '非管理员用户无权执行此操作']);
+    echo json_encode(['message' => 'Access Denied: You are not an admin']);
     exit;
 }
 
@@ -31,7 +31,7 @@ $remove_tags = $_POST['remove_tags'] ?? '';
 
 if ($article_id == 0) {
     http_response_code(400); // Bad Request
-    echo json_encode(['message' => '文章ID不能为空']);
+    echo json_encode(['message' => 'article_id is required']);
     exit;
 }
 
@@ -47,10 +47,10 @@ if ($result) {
     $time_stamp = date("Y-m-d H:i:s");
     $log_message = "User:$userId Article:$article_id AT:$time_stamp Action:UpdateTags\n";
     file_put_contents("../../logs/article_logs.txt", $log_message, FILE_APPEND);
-    echo json_encode(['message' => '文章标签更新成功']);
+    echo json_encode(['message' => 'tags updated successfully']);
 } else {
     http_response_code(500); // Internal Server Error
-    echo json_encode(['message' => '更新文章标签失败：' . $stmt->error]);
+    echo json_encode(['message' => 'tags updated failed: ' . $stmt->error]);
 }
 
 $stmt->close();

@@ -6,7 +6,7 @@ $tagName = $_GET['name'] ?? '';
 $articleId = $_GET['article_id'] ?? 0;
 
 if (empty($tagName)) {
-    echo json_encode(['success' => false, 'message' => '标签名不能为空']);
+    echo json_encode(['success' => false, 'message' => 'the tag name is required']);
     exit;
 }
 
@@ -22,8 +22,8 @@ try {
     $stmt->bind_param("ii", $articleId, $tagId);
     $stmt->execute();
 
-    echo json_encode(['success' => true, 'message' => '新标签添加成功']);
+    echo json_encode(['success' => true, 'message' => 'tag added successfully']);
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => '数据库错误: ' . $e->getMessage()]);
+    echo json_encode(['success' => false, 'message' => 'DataBase server error: ' . $e->getMessage()]);
 }
 ?>
