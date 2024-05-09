@@ -167,9 +167,17 @@
 
 #### 个人信息
 
+##### 查看个人信息
+
 ![profile](./profile.jpg)
 
-// TODO admin
+![profile_admin](./profile_admin.jpg)
+
+##### 修改个人信息
+
+![edit_profile](./edit_profile.jpg)
+
+![edit_profile_success](./edit_profile_success.jpg)
 
 #### 修改密码
 
