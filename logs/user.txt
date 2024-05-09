@@ -10,3 +10,7 @@ User:7 Action:Register AT:2024-05-07 00:07:05
 User:1 Action:Login IP:127.0.0.1 Host:LAPTOP-V8J4LDQC OS:Windows Browser:Chrome AT:2024-05-07 02:37:50
 User:1 Action:Login IP:127.0.0.1 Host:LAPTOP-V8J4LDQC OS:Windows Browser:Chrome AT:2024-05-07 13:47:51
 User:1 Action:Login IP:127.0.0.1 Host:LAPTOP-V8J4LDQC OS:Windows Browser:Chrome AT:2024-05-07 13:50:36
+User:8 Action:Register AT:2024-05-09 11:30:29
+User:8 Action:Login IP:127.0.0.1 Host:LAPTOP-V8J4LDQC OS:Windows Browser:Chrome AT:2024-05-09 11:33:08
+User:8 Action:ResetPassword AT:2024-05-09 11:35:43
+User:1 Action:Login IP:127.0.0.1 Host:LAPTOP-V8J4LDQC OS:Windows Browser:Chrome AT:2024-05-09 11:37:01

@@ -488,5 +488,6 @@ DELIMITER ;
 select * from article_tags where article_id = 1;
 CALL UpdateArticleTags(1, '3,4', '1');
 
-
+-- 展示所有存储过程
+SHOW PROCEDURE STATUS WHERE db = 'project240415';
 
