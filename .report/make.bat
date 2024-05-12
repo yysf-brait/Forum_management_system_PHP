@@ -1,0 +1,1 @@
+pandoc --reference-doc templates/templates.docx -s report.md -o report.docx

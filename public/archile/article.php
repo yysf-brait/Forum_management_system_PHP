@@ -64,7 +64,7 @@ if (!isset($_SESSION['user_id'])) {
     }
 
     function deleteArticle() {
-        const articleId = document.getElementById('articleId').value;
+        const articleId = new URLSearchParams(window.location.search).get('id');
         if (confirm("Are you sure you want to delete this article?")) {
             axios.get(`../../src/api/delete_article.php?article_id=${articleId}`)
                 .then(function (response) {
