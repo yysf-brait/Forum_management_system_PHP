@@ -1,1 +1,1 @@
-pandoc --reference-doc templates/templates.docx -s report.md -o report.docx
+pandoc --reference-doc templates/templates_refine.docx -s report.md -o report.docx

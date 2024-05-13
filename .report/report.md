@@ -1,484 +1,547 @@
-知识星球
+**Planète de Connaissance**
 
-本项目是基于PHP的一个论坛管理系统与平台。
+Ce projet est un système de gestion et une plateforme de forum basés sur PHP.
 
-系 Shanghai Normal University 2021级 PHP程序设计课程的期末大作业。
+Il s'agit du projet de fin de semestre du cours de programmation PHP de l'université normale de Shanghai, niveau 2021.
 
-# 项目简介
+# Table des Matières
 
-本项目是一个基于PHP的知识类论坛管理系统，用户可以在本网站发布文章，浏览文章，参与文章的编辑（包括别人的！），并且可以使用TAG系统方便地查找自己感兴趣的文章。
+- Introduction au Projet
+  - Introduction aux Fonctionnalités de Base du Site
+    - Modules Fonctionnels Principaux
+      - Module Utilisateur
+      - Module Article
+        - Parcourir les Articles
+        - Créer un Article
+        - Modifier un Article
+  - Conception de la Base de Données
+    - Entités de la Base de Données
+    - Relations de la Base de Données
+    - API de la Couche Base de Données
+  - Captures d'écran des Fonctionnalités du Site
+  - Gestion des Utilisateurs
+    - Inscription
+    - Connexion
+    - Informations Personnelles
+      - Voir les Informations Personnelles
+      - Modifier les Informations Personnelles
+      - Modifier le Mot de Passe
+      - Se Déconnecter
+  - Gestion du Forum
+    - Créer un Article
+    - Éditer un Article
+    - Supprimer un Article
+    - Éditer le TAG d'un Article
+- Implémentation des Fonctionnalités
+  - Navigation de Base
+    - Page d'Accueil
+    - Page de Recherche
+    - Détails de l'Article
+  - Gestion des Utilisateurs
+    - Inscription
+    - Connexion
+    - Informations Personnelles
+    - Modifier le Mot de Passe
+    - Se Déconnecter
+  - Gestion du Forum
+    - Créer un Article
+    - Éditer un Article
+    - Supprimer un Article
+    - Éditer le TAG d'un Article
+  - Gestion des Sessions
+    - $_SESSION
+    - $_COOKIE
+  - Fonction de Pagination
+  - Fonctionnalité des Journaux
+    - Enregistrement des Journaux
+    - Analyse des Journaux
+  - Conception de la Sécurité
+    - Chiffrement des Mots de Passe
+    - Code Captcha de Connexion
+    - Prévention des Injections SQL
 
-## 网站基本功能简介
 
-## 主要功能模块
+# Introduction au Projet
 
-### 用户模块
+Ce projet est un système de gestion de forum de type connaissance basé sur PHP, où les utilisateurs peuvent publier des articles, parcourir des articles, participer à l'édition des articles (y compris ceux des autres!), et utiliser un système de TAG pour trouver facilement les articles qui les intéressent.
 
-本模块包含了管理用户的若干功能：
+## Introduction aux Fonctionnalités de Base du Site
 
-- 注册
-- 登录
-- 个人信息
-    - 查看个人信息
-    - 修改个人信息
-- 修改密码（重置密码）
-- 退出登录
+## Modules Fonctionnels Principaux
 
-### 文章模块
+### Module Utilisateur
 
-本模块包含了管理文章的若干功能，按照功能可以分为：
+Ce module comprend plusieurs fonctionnalités de gestion des utilisateurs :
 
-- 浏览文章
-- 创建文章
-- 修改文章
+- Inscription
+- Connexion
+- Informations personnelles
+  - Voir les informations personnelles
+  - Modifier les informations personnelles
+- Modifier le mot de passe (réinitialisation du mot de passe)
+- Se déconnecter
 
-#### 浏览文章
+### Module Article
 
-浏览功能主要分为按照更新时间排序的文章列表，按照TAG分类的文章列表，以及搜索功能。
+Ce module comprend plusieurs fonctionnalités de gestion des articles, classées par fonctionnalité :
 
-1. 对于使用更新时间排序的文章列表
+#### Parcourir les Articles
 
-   用户可以选择合适的分页逻辑，查看文章的标题，作者，创建以及更新日期，TAG等。
-2. 对于使用搜索功能获得的文章列表
+La fonctionnalité de navigation est principalement divisée en une liste d'articles triés par date de mise à jour, une liste d'articles classée par TAG, et une fonctionnalité de recherche.
 
-   在上述功能的基础上，用户可以输入关键词，查找包含关键词的文章。
-3. 对于使用TAG分类的文章列表
+1. Pour la liste d'articles triés par date de mise à jour
 
-   在功能1的基础上，用户可以选择合适的TAG，查看包含该TAG的文章。
+   Les utilisateurs peuvent choisir la logique de pagination appropriée, voir le titre de l'article, l'auteur, la date de création et de mise à jour, le TAG, etc.
+2. Pour la liste d'articles obtenue par la fonction de recherche
 
-   此处的TAG选项由系统自动生成，是按照热度（包含该TAG的文章数量）倒序给出的。
+   En plus des fonctionnalités ci-dessus, les utilisateurs peuvent entrer des mots-clés pour rechercher des articles contenant ces mots-clés.
+3. Pour la liste d'articles classée par TAG
 
-   用户可以自由选择若干TAG，并可一键切换筛选TAG的逻辑：
+   En plus de la fonctionnalité 1, les utilisateurs peuvent choisir le TAG approprié pour voir les articles contenant ce TAG.
 
-    - 全包含
-      筛选出包含所有选择的TAG的文章
-    - 任意包含
-      筛选出包含任意一个选择的TAG的文章
+   Les options de TAG ici sont générées automatiquement par le système, présentées en ordre décroissant de popularité (nombre d'articles contenant ce TAG).
 
-#### 创建文章
+   Les utilisateurs peuvent choisir plusieurs TAGs et peuvent basculer en un clic entre les logiques de filtrage des TAGs :
 
-对于所有登录用户，均可以创建文章，创建文章时需要填写标题，内容，并在创建成功后自动成为文章的第一位作者。
+   - Inclusion totale
+     Filtrer pour inclure les articles contenant tous les TAGs sélectionnés
+   - Inclusion partielle
+     Filtrer pour inclure les articles contenant n'importe quel TAG sélectionné
 
-#### 修改文章
+#### Créer un Article
 
-对于所有管理员用户，均可以修改文章，修改文章主要包括：
+Tous les utilisateurs connectés peuvent créer des articles. Lors de la création d'un article, l'utilisateur doit remplir le titre et le contenu, et devient automatiquement le premier auteur de l'article après la création réussie.
 
-- 对文章内容的修改
-  可修改标题，内容。并在修改成功后自动成为文章的作者之一。
-- 对文章TAG的修改
-  可修改文章的TAG，包括增加或者删除TAG以及为该文章新建一个TAG，对TAG的修改不会影响文章的作者。
-- 对文章的删除
-  可删除文章，删除后文章将不再显示在文章列表中。
+#### Modifier un Article
 
-## 数据库设计
+Tous les utilisateurs administrateurs peuvent modifier les articles. La modification principale inclut :
 
-### 数据库实体
+- Modification du contenu de l'article
+  Possibilité de modifier le titre et le contenu. Après une modification réussie, l'utilisateur devient l'un des auteurs de l'article.
+- Modification du TAG de l'article
+  Possibilité de modifier le TAG de l'article, y compris l'ajout ou la suppression de TAGs, ou de créer un nouveau TAG pour cet article. La modification du TAG n'affecte pas les auteurs de l'article.
+- Suppression d'un article
+  Possibilité de supprimer un article, qui ne sera alors plus affiché dans la liste des articles.
 
-1. Users（用户）:
+## Conception de la Base de Données
 
-    - **user_id: 主键，自增整数，唯一标识一个用户。**
-    - username: 用户名，唯一且不包含逗号，用于用户登录。
-    - password: 用户的密码，存储加密形式，保障账户安全。
-    - email: 用户的电子邮件地址，用于联系和账户恢复。
-    - is_admin: 布尔值，标记是否为管理员，用于控制权限。
-    - created_at: 时间戳，记录用户账户的创建时间。
+### Entités de la Base de Données
 
-2. Articles（文章）:
+1. Utilisateurs (Users) :
 
-    - **article_id: 主键，自增整数，唯一标识一篇文章。**
-    - title: 文章标题。
-    - content: 文章内容，以长文本形式存储。
-    - created_at: 时间戳，文章的创建时间，自动创建。
-    - updated_at: 时间戳，文章的最后更新时间，自动更新。
+  - **user_id : clé primaire, entier auto-incrémenté, identifiant unique d'un utilisateur.**
+  - username : nom d'utilisateur, unique et ne contient pas de virgule, utilisé pour la connexion.
+  - password : mot de passe de l'utilisateur, stocké sous forme cryptée, pour sécuriser le compte.
+  - email : adresse e-mail de l'utilisateur, utilisée pour le contact et la récupération du compte.
+  - is_admin : valeur booléenne, indique si l'utilisateur est un administrateur, utilisée pour contrôler l'accès.
 
-3. Tags（标签）:
+2. Articles (Articles) :
 
-    - **tag_id: 主键，自增整数，唯一标识一个标签。**
-    - tag_name: 标签名称，唯一且不包含逗号。
+  - **article_id : clé primaire, entier auto-incrémenté, identifiant unique d'un article.**
+  - title : titre de l'article.
+  - content : contenu de l'article, stocké sous forme de texte long.
+  - created_at : horodatage, heure de création de l'article, créée automatiquement.
+  - updated_at : horodatage, heure de la dernière mise à jour de l'article, mise à jour automatiquement.
 
-4. Article_Tags（文章标签关系）:
+3. Tags (Tags) :
 
-    - **article_id 和 tag_id: 复合主键，标识文章和标签的关系。**
-      外键关系指向 Articles 和 Tags 表，支持级联删除。
+  - **tag_id : clé primaire, entier auto-incrémenté, identifiant unique d'un tag.**
+  - tag_name : nom du tag, unique et ne contient pas de virgule.
 
-5. Article_Authors（文章作者关系）:
+4. Relations Tags-Articles (Article_Tags) :
 
-    - **article_id 和 user_id: 复合主键，标识文章和作者的关系。**
-      外键关系指向 Articles 和 Users 表，支持级联删除。
+  - **article_id et tag_id : clé primaire composée, identifiant la relation entre un article et un tag.**
+    Les relations de clé étrangère pointent vers les tables Articles et Tags, avec suppression en cascade.
 
-### 数据库关系
+5. Relations Auteurs-Articles (Article_Authors) :
 
-多对多关系:
+  - **article_id et user_id : clé primaire composée, identifiant la relation entre un article et un auteur.**
+    Les relations de clé étrangère pointent vers les tables Articles et Users, avec suppression en cascade.
 
-- Articles 和 Tags: 通过 Article_Tags 表实现多对多关系，一篇文章可以有多个标签，一个标签可以标注多篇文章。
-- Articles 和 Users: 通过 Article_Authors 表实现多对多关系，一篇文章可以有多个共同作者。
+### Relations de la Base de Données
 
-### 数据库层API
+Relations multiples à multiples :
 
-视图:
+- Articles et Tags : via la table Article_Tags, mise en œuvre d'une relation multiples à multiples, un article peut avoir plusieurs tags, un tag peut marquer plusieurs articles.
+- Articles et Utilisateurs : via la table Article_Authors, mise en œuvre d'une relation multiples à multiples, un article peut avoir plusieurs co-auteurs.
 
-- article_tags_view: 聚合视图，显示每篇文章及其所有标签。
-- article_authors_view: 聚合视图，显示每篇文章及其所有作者。
-- article_detail_view: 综合视图，显示文章详细信息，包括标题、作者、创建时间、更新时间、标签和内容。
-- article_list_view: 文章列表视图，显示文章的基本信息，支持排序和分页。
-- article_count_view: 文章计数视图，显示总的文章数量。
-- tag_article_count_view：标签文章计数视图，显示每个标签下的文章数量。
+### API de la Couche Base de Données
 
-存储过程:
+Vues :
 
-- FetchArticlesByPage: 分页获取文章列表，支持按更新时间排序。
-- FetchArticlesByTagsWithPaging: 根据标签（允许多个）过滤文章，并支持分页功能。允许部分标签匹配。
-- FetchArticlesByAllTagsWithPaging: 根据标签（允许多个）过滤文章，并支持分页功能。要求完全匹配给定的标签。
-- CreateArticle: 创建新文章，并将其与作者关联。
-- UpdateArticle: 更新指定文章的内容和标题，并管理文章作者信息。当发生错误时主动返回错误信息。
-- DeleteArticle: 根据文章ID删除文章。当发生错误时主动返回错误信息。
-- UpdateArticleTags: 更新指定文章的标签，包括添加和删除标签（允许多个）。
-- SearchArticlesWithPaging: 根据关键词搜索文章，并支持分页功能。
+- article_tags_view : vue agrégée, affiche chaque article et tous ses tags.
+- article_authors_view : vue agrégée, affiche chaque article et tous ses auteurs.
+- article_detail_view : vue intégrée, affiche les détails de l'article, y compris le titre, les auteurs, les dates de création et de mise à jour, les tags et le contenu.
+- article_list_view : vue de la liste des articles, affiche les informations de base des articles, prend en charge le tri et la pagination.
+- article_count_view : vue de comptage des articles, affiche le nombre total d'articles.
+- tag_article_count_view : vue de comptage des articles par tag, affiche le nombre d'articles sous chaque tag.
 
-## 网站各功能截图
+Procédures stockées :
 
-### 首页
+- FetchArticlesByPage : obtention paginée de la liste des articles, prend en charge le tri par date de mise à jour.
+- FetchArticlesByTagsWithPaging : filtre les articles selon les tags (permet plusieurs), et prend en charge la fonction de pagination. Permet une correspondance partielle des tags.
+- FetchArticlesByAllTagsWithPaging : filtre les articles selon les tags (permet plusieurs), et prend en charge la fonction de pagination. Exige une correspondance complète avec les tags donnés.
+- CreateArticle : crée un nouvel article et l'associe à son auteur.
+- UpdateArticle : met à jour le contenu et le titre d'un article spécifié, et gère les informations des auteurs de l'article. Retourne activement des messages d'erreur en cas d'erreur.
+- DeleteArticle : supprime un article selon son ID. Retourne activement des messages d'erreur en cas d'erreur.
+- UpdateArticleTags : met à jour les tags d'un article spécifié, incluant l'ajout et la suppression de tags (permet plusieurs).
+- SearchArticlesWithPaging : recherche des articles selon un mot-clé, et prend en charge la fonction de pagination.
+
+## Captures d'écran des Fonctionnalités du Site
+
+### Page d'Accueil
 
 ![index](./index.jpg)
 
-### 按照TAG浏览
+### Navigation par TAG
 
 ![index_tag1](./index_tag1.jpg)
 
 ![index_tag2](./index_tag2.jpg)
 
-### 搜索页
+### Page de Recherche
 
 ![search](./search.jpg)
 
-## 用户管理
+### Détails de l'Article
 
-### 注册
+![article_detail](./article_detail.jpg)
+
+## Gestion des Utilisateurs
+
+### Inscription
 
 ![register](./register.jpg)
 
 ![register_success](./register_success.jpg)
 
-### 登录
+### Connexion
 
 ![login](./login.jpg)
 
 ![login_success](./login_success.jpg)
 
-### 个人信息
+### Informations Personnelles
 
-#### 查看个人信息
+#### Voir les Informations Personnelles
 
 ![profile](./profile.jpg)
 
 ![profile_admin](./profile_admin.jpg)
 
-#### 修改个人信息
+#### Modifier les Informations Personnelles
 
 ![edit_profile](./edit_profile.jpg)
 
 ![edit_profile_success](./edit_profile_success.jpg)
 
-### 修改密码
+### Modifier le Mot de Passe
 
 ![reset_password](./reset_password.jpg)
 
 ![reset_password_success](./reset_password_success.jpg)
 
-### 退出登录
+### Se Déconnecter
 
 ![logout](./logout.jpg)
 
-## 论坛管理
+## Gestion du Forum
 
-### 创建文章
+### Créer un Article
 
 ![create_article](./create_article.jpg)
 
-### 编辑文章
+### Éditer un Article
 
 ![update_article](./update_article.jpg)
 
-### 删除文章
+### Supprimer un Article
 
 ![delete_article](./delete_article.jpg)
 
-### 为文章编辑TAG
+### Éditer le TAG d'un Article
 
 ![article_tag_choice](./article_tag_choice.jpg)
 
-## 功能与文件对照表
+## Tableau de Correspondance Fonction-Fichier
 
-- 根目录
+- Répertoire Racine
 
-    | Function        | Nom de fichier     |
-    |:----------------|:-------------------|
-    | 网站的主页，用于文章的浏览功能 | index.php          |
-    | 关键字搜索功能         | search_results.php |
+    | Fonction                     | Nom de fichier        |
+    |:-----------------------------|:----------------------|
+    | Page principale du site, pour la fonction de navigation des articles | index.php             |
+    | Fonction de recherche par mot-clé           | search_results.php    |
 
 - db
 
-    | Function | Nom de fichier |
+    | Fonction | Nom de fichier |
     |:---------|:---------------|
-    | 数据库初始化   | make.sql       |
+    | Initialisation de la base de données | make.sql       |
 
 - logs
 
-    | Function   | Nom de fichier   |
-    |:-----------|:-----------------|
-    | 文章相关操作日志   | article_logs.txt |
-    | 用户相关操作日志   | user.txt         |
-    | 每日流量分析     | v1.php           |
-    | 每日新增/活跃    | v2.php           |
-    | 最热时段/页面/操作 | v3.php           |
-    | 每日文章统计     | v4.php           |
-    | 用户惯用分析     | v5.php           |
-    | 日志分析导航页面   | view.php         |
+    | Fonction             | Nom de fichier       |
+    |:---------------------|:---------------------|
+    | Journal des opérations liées aux articles | article_logs.txt |
+    | Journal des opérations liées aux utilisateurs  | user.txt         |
+    | Analyse du trafic quotidien      | v1.php           |
+    | Nouveaux utilisateurs actifs/quotidiens | v2.php           |
+    | Analyse des périodes/pages/opérations les plus fréquentées | v3.php           |
+    | Statistiques quotidiennes des articles     | v4.php           |
+    | Analyse des habitudes des utilisateurs     | v5.php           |
+    | Page de navigation de l'analyse des journaux   | view.php         |
 
 - css
 
-    | Function | Nom de fichier |
+    | Fonction | Nom de fichier |
     |:---------|:---------------|
-    | 网站样式表    | style.css      |
-    | 网站样式表    | style1.css     |
+    | Feuilles de style du site | style.css      |
+    | Feuilles de style du site | style1.css     |
 
 - public
 
     - archile
 
-        | Function          | Nom de fichier         |
-        |:------------------|:-----------------------|
-        | 展示单个文章详情          | article.php            |
-        | 更新文章TAG（包括增加新TAG） | article_tag_choice.php |
-        | 创建文章              | create_article.php     |
-        | 更新文章              | update_article.php     |
+        | Fonction                  | Nom de fichier            |
+        |:--------------------------|:--------------------------|
+        | Affichage des détails d'un article unique          | article.php               |
+        | Mise à jour des TAGs d'un article (ajout de nouveaux TAGs) | article_tag_choice.php   |
+        | Création d'un article              | create_article.php     |
+        | Mise à jour d'un article              | update_article.php     |
 
     - user
 
-        | Function | Nom de fichier     |
-        |:---------|:-------------------|
-        | 更新用户资料   | edit_profile.php   |
-        | 用户登录     | login.php          |
-        | 展示用户资料   | profile.php        |
-        | 用户注册     | register.php       |
-        | 找回（重置）密码 | reset_password.php |
+        | Fonction | Nom de fichier         |
+        |:---------|:-----------------------|
+        | Mise à jour des informations utilisateur | edit_profile.php       |
+        | Connexion utilisateur     | login.php                |
+        | Affichage des informations utilisateur   | profile.php            |
+        | Inscription utilisateur     | register.php             |
+        | Réinitialisation (réinitialisation) du mot de passe | reset_password.php |
+
 
 - src
 
-   | Function     | Nom de fichier     | 
-   |:-------------|:-------------------|
-   | 生成验证码        | captcha.php        |
-   | 用于数据库连接的基本配置 | config.php         |
-   | API 校验用户登录   | login.php          |
-   | API 用户登出     | logout.php         |
-   | API 校验用户注册   | register.php       |
-   | API 重置用户密码   | reset_password.php |
-   | API 更新用户个人资料 | update_profile.php |
+   | Fonction       | Nom de fichier       | 
+   |:---------------|:---------------------|
+   | Génération du captcha        | captcha.php          |
+   | Configuration de base pour la connexion à la base de données | config.php           |
+   | API de vérification de connexion utilisateur   | login.php            |
+   | API de déconnexion utilisateur     | logout.php           |
+   | API de vérification d'inscription utilisateur   | register.php         |
+   | API de réinitialisation du mot de passe utilisateur   | reset_password.php   |
+   | API de mise à jour des informations personnelles de l'utilisateur | update_profile.php   |
 
     - api
 
-        | Function                      | Nom de fichier         |
-        |:------------------------------|:-----------------------|
-        | API 增加新的TAG                   | add_tag.php            |
-        | API 返回文章详情                    | article.php            |
-        | API 返回文章总数                    | article_count_view.php |
-        | API 为文章增加或者移除TAG              | article_tag.php        |
-        | API 按照选择的TAG，返回分页后的文章列表（任意包含） | articles.php           |
-        | API 按照选择的TAG，返回分页后的文章列表（全包含）  | articles_all_tags.php  |
-        | API 新建文章                      | creat_article.php      |
-        | API 删除文章                      | delete_article.php     |
-        | API 返回文章包含的所有TAG              | get_article.php        |
-        | API 返回标题中包含关键字的所有文章的分页列表      | search_articles.php    |
-        | API 返回所有TAG（按照热度降序）           | tags.php               |
-        | API 更新文章                      | update_article.php     |
+        | Fonction                              | Nom de fichier           |
+        |:--------------------------------------|:-------------------------|
+        | API pour ajouter un nouveau TAG                   | add_tag.php              |
+        | API pour retourner les détails d'un article                    | article.php              |
+        | API pour retourner le nombre total d'articles                    | article_count_view.php   |
+        | API pour ajouter ou retirer des TAGs à un article              | article_tag.php          |
+        | API pour retourner la liste des articles paginés selon les TAGs choisis (incluant n'importe quel TAG) | articles.php             |
+        | API pour retourner la liste des articles paginés selon les TAGs choisis (incluant tous les TAGs)  | articles_all_tags.php    |
+        | API pour créer un nouvel article                      | creat_article.php        |
+        | API pour supprimer un article                      | delete_article.php       |
+        | API pour retourner tous les TAGs inclus dans un article              | get_article.php          |
+        | API pour retourner la liste paginée de tous les articles dont les titres contiennent des mots-clés      | search_articles.php      |
+        | API pour retourner tous les TAGs (triés par popularité décroissante)           | tags.php                 |
+        | API pour mettre à jour un article                      | update_article.php       |
 
-# 功能实现
+# Implémentation des Fonctionnalités
 
-## 基本浏览
+## Navigation de Base
 
-### 首页
+### Page d'Accueil
 
-首页是网站的主页，用于展示文章的浏览功能，包括：
+La page d'accueil est la page principale du site, utilisée pour afficher la fonction de navigation des articles, incluant :
 
-- 按照更新时间排序的文章列表（默认）
-- 按照TAG分类的文章列表
-- 导航到搜索页
-- 导航到登录页（未登录时）
-- 导航到个人信息页（已登录时）
+- Liste des articles triés par date de mise à jour (par défaut)
+- Liste des articles classée par TAG
+- Navigation vers la page de recherche
+- Navigation vers la page de connexion (si non connecté)
+- Navigation vers la page d'informations personnelles (si connecté)
 
-#### 文章列表展示
-首页展示的文章列表按照文章的更新时间排序，默认展示最新更新的文章。每篇文章的显示格式包括文章标题、更新日期、创建日期、作者以及相关标签。用户可以通过点击文章标题访问文章的详细页面。
+#### Affichage de la Liste des Articles
+La liste des articles affichée sur la page d'accueil est triée selon la date de mise à jour des articles, montrant par défaut les articles les plus récemment mis à jour. Le format d'affichage de chaque article comprend le titre de l'article, la date de mise à jour, la date de création, l'auteur et les tags associés. Les utilisateurs peuvent cliquer sur le titre de l'article pour accéder à la page détaillée de l'article.
 
-#### 文章标签分类展示
-首页包含一个动态生成的文章标签列表。这些标签通过调用后端接口 `src/api/tags.php` 获取，并以按钮形式显示在页面上。用户可以点击这些标签按钮来过滤文章列表，根据选择的标签来显示相关文章。
+#### Affichage de la Classification des Articles par Tags
+La page d'accueil contient également une liste dynamique de tags d'articles. Ces tags sont obtenus via l'API du backend `src/api/tags.php` et sont affichés sous forme de boutons sur la page. Les utilisateurs peuvent cliquer sur ces boutons de tags pour filtrer la liste des articles, affichant les articles associés aux tags sélectionnés.
 
-##### 标签切换逻辑
-有一个切换按钮 `Switch to All-Inclusive` 允许用户在包含所有选择标签的文章（"全部包含"模式）和包含任一选择标签的文章（"任一包含"模式）之间切换。这个功能通过前端逻辑实现，改变按钮的状态和类名来表示当前模式。
+##### Logique de Changement de Tags
+Il y a un bouton de basculement `Switch to All-Inclusive` qui permet aux utilisateurs de basculer entre les articles contenant tous les tags sélectionnés ("mode inclusif total") et les articles contenant n'importe quel tag sélectionné ("mode inclusif partiel"). Cette fonctionnalité est implémentée via la logique frontale, en changeant l'état et le nom de classe du bouton pour représenter le mode actuel.
 
-##### API 调用说明
-- **加载标签**：当页面加载时，`loadTags` 函数会调用 `src/api/tags.php` API 以获取所有可用的标签。此 API 返回标签的列表，每个标签用于生成页面上的一个按钮。
-- **筛选文章**：当用户点击标签按钮筛选文章时，根据当前的标签筛选模式（全部包含或任一包含），页面会调用不同的 API：
-  - **全部包含模式**：调用 `src/api/articles_all_tags.php`，传递选中的标签ID，返回包含所有这些标签的文章。
-  - **任一包含模式**：调用 `src/api/articles.php`，传递选中的标签ID，返回包含任一这些标签的文章。
+##### Explications des Appels API
+- **Chargement des Tags** : Lorsque la page se charge, la fonction `loadTags` appelle l'API `src/api/tags.php` pour obtenir tous les tags disponibles. Cette API retourne une liste de tags, chaque tag étant utilisé pour générer un bouton sur la page.
+- **Filtrage des Articles** : Lorsque l'utilisateur clique sur les boutons de tags pour filtrer les articles, selon le mode de sélection de tags actuel (inclusif total ou inclusif partiel), la page appelle différentes API :
+  - **Mode inclusif total** : Appelle `src/api/articles_all_tags.php`, en passant les ID de tags sélectionnés, et retourne les articles contenant tous ces tags.
+  - **Mode inclusif partiel** : Appelle `src/api/articles.php`, en passant les ID de tags sélectionnés, et retourne les articles contenant n'importe quel de ces tags.
 
-#### 分页功能
-文章列表支持分页浏览，底部有分页控制按钮包括“上一页”和“下一页”。用户还可以通过输入页码直接跳转到指定页面或选择每页显示的文章数量（5, 10, 15, 20）。这些功能通过调用分页接口来动态加载指定页面的文章数据。
+#### Fonction de Pagination
+La liste des articles prend en charge la navigation paginée, avec des boutons de contrôle de pagination en bas incluant "Page précédente" et "Page suivante". Les utilisateurs peuvent également entrer un numéro de page pour sauter directement à une page spécifique ou choisir le nombre d'articles affichés par page (5, 10, 15, 20). Ces fonctionnalités sont implémentées via des appels d'interface de pagination pour charger dynamiquement les données des articles de la page spécifiée.
 
-#### 导航到搜索页
-提供一个按钮链接到 `search_results.php`，允许用户跳转到搜索页面进行文章搜索。
+#### Navigation vers la Page de Recherche
+Un bouton fournit un lien vers `search_results.php`, permettant aux utilisateurs de passer à la page de recherche pour effectuer une recherche d'articles.
 
-#### 用户登录与个人信息访问
-- **未登录时**：如果用户未登录，首页顶部会显示一个登录链接，指向 `user/login.php`，允许用户登录。
-- **已登录时**：如果用户已登录，首页顶部会显示用户的用户名，并提供一个链接到 `user/profile.php`，允许用户访问和编辑个人信息。
+#### Affichage du Statut de Connexion de l'Utilisateur
+- **Si non connecté** : Si l'utilisateur n'est pas connecté, un lien de connexion s'affiche en haut de la page d'accueil, pointant vers `user/login.php`, permettant à l'utilisateur de se connecter.
+- **Si connecté** : Si l'utilisateur est connecté, le nom d'utilisateur s'affiche en haut de la page d'accueil, fournissant un lien vers `user/profile.php`, permettant à l'utilisateur d'accéder et de modifier ses informations personnelles.
 
-### 技术实现细节
+### Détails Techniques de l'Implémentation
 
-- **后端会话管理**：使用 PHP 的 `session_start()` 管理用户会话。
-- **前端动态内容加载**：使用 Axios 库通过 AJAX 请求与后端 API 交互，动态加载文章列表和标签。
-- **前端页面导航**：使用 JavaScript 控制页面导航逻辑，如文章分页和页面跳转。
-- **安全性**：通过 PHP 的 `htmlspecialchars` 函数处理输出，防止 XSS 攻击。
+- **Gestion des Sessions Backend** : Utilise la fonction PHP `session_start()` pour gérer les sessions utilisateur.
+- **Chargement Dynamique du Contenu Frontal** : Utilise la bibliothèque Axios pour interagir avec les API backend via des requêtes AJAX, chargeant dynamiquement la liste des articles et des tags.
+- **Navigation de la Page Frontale** : Utilise JavaScript pour contrôler la logique de navigation de la page, comme la pagination des articles et
 
-### 搜索页
+ la navigation entre les pages.
+- **Sécurité** : Utilise la fonction PHP `htmlspecialchars` pour traiter les sorties, prévenant les attaques XSS.
 
-文章搜索页允许用户通过输入关键词来搜索文章标题，并展示搜索结果。以下是详细的功能说明和技术实现细节：
+### Page de Recherche
 
-#### 搜索输入和按钮
-- **搜索框**：页面提供一个输入框，用户可以在此输入要搜索的文章标题的关键词。
-- **搜索按钮**：旁边有一个搜索按钮，用户点击后会根据输入的关键词进行搜索。搜索结果会在下方的列表中动态显示。
+La page de recherche d'articles permet aux utilisateurs d'entrer des mots-clés pour rechercher des titres d'articles et affiche les résultats de la recherche. Voici une explication détaillée des fonctionnalités et des détails techniques de l'implémentation :
 
-#### API 调用说明
-- **搜索文章**：当用户点击搜索按钮后，页面会调用 `src/api/search_articles.php` API，传递用户输入的查询关键词、当前页码和每页显示的项目数作为参数。该 API 返回与查询条件匹配的文章列表。
-- **响应处理**：前端通过 Axios 发送 GET 请求，接收到的数据用于动态生成每篇文章的详细显示，包括标题、更新日期、创建日期、作者和标签。
+#### Entrée de Recherche et Bouton
+- **Boîte de recherche** : La page fournit une boîte d'entrée où les utilisateurs peuvent entrer les mots-clés du titre de l'article qu'ils souhaitent rechercher.
+- **Bouton de recherche** : Un bouton de recherche est situé à côté de la boîte d'entrée. Lorsque l'utilisateur clique sur ce bouton, la recherche est effectuée en fonction des mots-clés entrés. Les résultats de la recherche sont affichés dynamiquement dans la liste ci-dessous.
 
-### 分页功能
-搜索结果支持分页显示，具体功能如下：
+#### Explications des Appels API
+- **Recherche d'Articles** : Lorsque l'utilisateur clique sur le bouton de recherche, la page appelle l'API `src/api/search_articles.php`, passant les mots-clés de la requête, le numéro de page actuel, et le nombre d'articles à afficher par page comme paramètres. Cette API retourne une liste d'articles correspondant aux critères de la requête.
+- **Traitement de la Réponse** : Le frontal envoie une requête GET via Axios, et les données reçues sont utilisées pour générer dynamiquement l'affichage détaillé de chaque article, incluant le titre, la date de mise à jour, la date de création, l'auteur et les tags.
 
-- **分页控件**：页面底部有分页控制按钮，包括“上一页”、“下一页”和“跳转到页”输入框，以及一个下拉选择框用于选择每页显示的文章数（5, 10, 15, 20项）。
-- **动态加载**：用户可以通过点击“上一页”和“下一页”按钮浏览不同的搜索结果页。用户还可以直接输入一个页码，点击“跳转”按钮快速跳转到指定页。
+### Fonction de Pagination
+Les résultats de la recherche prennent en charge l'affichage paginé, avec les fonctionnalités suivantes :
 
-### 用户登录状态显示
-- **未登录时**：如果用户未登录，页面顶部会显示一个“登录”链接，点击后跳转到登录页面。
-- **已登录时**：如果用户已登录，页面顶部会显示用户的用户名，点击用户名可以跳转到用户的个人资料页面。
+- **Contrôles de Pagination** : Des boutons de contrôle de pagination sont situés en bas de la page, incluant "Page précédente", "Page suivante", et une boîte d'entrée "Aller à la page", ainsi qu'une liste déroulante pour choisir le nombre d'articles à afficher par page (5, 10, 15, 20 articles).
+- **Chargement Dynamique** : Les utilisateurs peuvent naviguer entre différentes pages de résultats de recherche en cliquant sur les boutons "Page précédente" et "Page suivante". Ils peuvent également entrer un numéro de page et cliquer sur le bouton "Aller" pour sauter rapidement à la page spécifiée.
 
-### 技术实现细节
-- **前端动态内容加载**：使用 Axios 库通过 AJAX 请求与后端 API 交互，动态加载搜索结果。
-- **会话管理**：使用 PHP 的 `session_start()` 管理用户会话，检查用户是否已登录，并据此显示用户信息或登录链接。
-- **安全性**：使用 PHP 的 `htmlspecialchars` 函数处理用户输入和显示输出，防止 XSS 攻击。
-- **用户交互**：通过 JavaScript 监听页面元素（如按钮和输入框）的事件，实现用户交互的响应逻辑。
+### Affichage du Statut de Connexion de l'Utilisateur
+- **Si non connecté** : Si l'utilisateur n'est pas connecté, un lien "Connexion" s'affiche en haut de la page, qui, lorsqu'on clique dessus, redirige vers la page de connexion.
+- **Si connecté** : Si l'utilisateur est connecté, le nom d'utilisateur s'affiche en haut de la page, cliquer sur le nom d'utilisateur redirige vers la page de profil de l'utilisateur.
 
-### 文章详情
+### Détails Techniques de l'Implémentation
+- **Chargement Dynamique du Contenu Frontal** : Utilise la bibliothèque Axios pour interagir avec les API backend via des requêtes AJAX, chargeant dynamiquement les résultats de la recherche.
+- **Gestion des Sessions** : Utilise la fonction PHP `session_start()` pour gérer les sessions utilisateur, vérifiant si l'utilisateur est connecté et affichant en conséquence les informations utilisateur ou le lien de connexion.
+- **Sécurité** : Utilise la fonction PHP `htmlspecialchars` pour traiter les entrées et les sorties des utilisateurs, prévenant les attaques XSS.
+- **Interactions Utilisateur** : Utilise JavaScript pour écouter les événements des éléments de la page (comme les boutons et les zones de texte) et implémenter la logique de réponse aux interactions utilisateur.
 
-生成的文章列表中的每篇文章都可以点击标题进入文章详情页。
-文章详情页为用户提供了查看文章全文和相关信息的功能，并为管理员提供了编辑和删除文章的选项。以下是详细的功能说明和技术实现细节：
+### Détails de l'Article
 
-#### 页面布局
-- **标题和元信息**：页面显示文章的标题、作者、标签、创建时间和更新时间。
-- **文章内容**：文章的正文内容显示在页面的主体部分，支持基本的HTML格式，如换行。
+Chaque article listé peut être sélectionné pour accéder à la page de détails de l'article.
+La page de détails de l'article fournit aux utilisateurs la possibilité de voir le texte complet de l'article et des informations connexes, et offre aux administrateurs des options pour éditer et supprimer l'article. Voici une explication détaillée des fonctionnalités et des détails techniques de l'implémentation :
 
-#### API 调用
-- **获取文章详情**：页面加载时，通过调用 `../../src/api/article.php` API 获取文章的详细信息。此 API 需要传递文章ID作为参数，返回的数据用于填充页面上的各个部分。
+#### Agencement de la Page
+- **Titre et Métadonnées** : La page aff
 
-### 管理功能（仅限管理员）
+iche le titre de l'article, les auteurs, les tags, la date de création et la date de mise à jour.
+- **Contenu de l'Article** : Le contenu principal de l'article est affiché dans la partie centrale de la page, prenant en charge les formats HTML de base, tels que les sauts de ligne.
 
-#### 编辑文章
-- **编辑文章表单**：如果用户是管理员，页面将显示一个“编辑文章”按钮。点击此按钮将通过表单提交的方式导向 `update_article.php`，其中包含文章ID的隐藏字段。
-- **编辑标签表单**：同样地，还有一个“编辑标签”按钮，点击后导向 `article_tag_choice.php`，用于编辑文章的标签。
+#### Appels API
+- **Obtention des Détails de l'Article** : Lors du chargement de la page, un appel est fait à l'API `../../src/api/article.php` pour obtenir les détails de l'article. Cette API nécessite l'ID de l'article comme paramètre, les données retournées sont utilisées pour remplir les différentes sections de la page.
 
-#### 删除文章
-- **删除按钮**：管理员还可以看到一个“删除文章”按钮。点击此按钮将触发删除操作，经用户确认后，调用 `../../src/api/delete_article.php` API 删除文章。
-- **删除确认**：点击删除按钮时，会弹出确认对话框，确认后才执行删除操作，以防误操作。
+### Fonctionnalités de Gestion (Réservées aux Administrateurs)
 
-### 技术实现细节
+#### Édition de l'Article
+- **Formulaire d'Édition de l'Article** : Si l'utilisateur est un administrateur, la page affichera un bouton "Éditer l'article". Cliquer sur ce bouton redirigera vers `update_article.php` via un formulaire soumis, incluant un champ caché contenant l'ID de l'article.
+- **Formulaire d'Édition des Tags** : De même, il y aura un bouton "Éditer les Tags", qui redirigera vers `article_tag_choice.php`, utilisé pour éditer les tags de l'article.
 
-- **权限控制**：页面在服务器端检查用户的登录状态和管理员状态。如果用户未登录，则重定向到登录页面。如果用户不是管理员，则不显示管理功能。
-- **前端动态内容加载**：使用 Axios 库通过 AJAX 请求与后端 API 交互，动态加载文章详情。
-- **用户交互**：通过 JavaScript 监听事件和处理用户操作，如点击按钮执行搜索、编辑和删除操作。
-- **安全性**：使用 PHP 的 `htmlspecialchars` 函数处理显示的用户生成内容，以防止 XSS 攻击。
+#### Suppression de l'Article
+- **Bouton de Suppression** : Les administrateurs peuvent également voir un bouton "Supprimer l'article". Cliquer sur ce bouton déclenchera l'opération de suppression, qui, après confirmation de l'utilisateur, appellera l'API `../../src/api/delete_article.php` pour supprimer l'article.
+- **Confirmation de Suppression** : En cliquant sur le bouton de suppression, une boîte de dialogue de confirmation apparaîtra, et l'opération de suppression ne sera exécutée qu'après confirmation, afin d'éviter toute action accidentelle.
 
-## 用户管理
+### Détails Techniques de l'Implémentation
 
-### 注册
+- **Contrôle des Permissions** : La page vérifie côté serveur l'état de connexion de l'utilisateur et son statut d'administrateur. Si l'utilisateur n'est pas connecté, il est redirigé vers la page de connexion. Si l'utilisateur n'est pas un administrateur, les fonctionnalités de gestion ne sont pas affichées.
+- **Chargement Dynamique du Contenu Frontal** : Utilise la bibliothèque Axios pour interagir avec les API backend via des requêtes AJAX, chargeant dynamiquement les détails de l'article.
+- **Interactions Utilisateur** : Utilise JavaScript pour écouter les événements et gérer les opérations utilisateur, telles que cliquer sur des boutons pour effectuer des recherches, des éditions et des suppressions.
+- **Sécurité** : Utilise la fonction PHP `htmlspecialchars` pour traiter le contenu généré par l'utilisateur affiché, afin de prévenir les attaques XSS.
 
-注册页存在一个表单可以输入用户名、密码以及邮箱。
-当用户提交时，会将表单以POST提交给`src/register.php`，该API会检查提交是否合法。
+## Gestion des Utilisateurs
 
-一个合法的提交必须满足：
+### Inscription
 
-- 用户名必须至少有5个字符，并且不存在重名用户
-- 密码必须至少有8个字符，并且同时包含数组和字母
-- 邮箱合法
+La page d'inscription contient un formulaire permettant à l'utilisateur de saisir un nom d'utilisateur, un mot de passe et une adresse e-mail.
+Lorsque l'utilisateur soumet le formulaire, celui-ci est posté à `src/register.php` via POST, et cette API vérifie si la soumission est valide.
 
-如果提交不合法，会以GET方式返回注册页面，注册页面会检查是否有error字段，并会按照关键字生成相关错误提示。
-否则会展示欢迎界面，并在数秒后转到登录界面。
+Une soumission valide doit respecter les critères suivants :
 
-### 登录
+- Le nom d'utilisateur doit comporter au moins 5 caractères et ne doit pas déjà exister.
+- Le mot de passe doit comporter au moins 8 caractères et contenir à la fois des chiffres et des lettres.
+- L'adresse e-mail doit être valide.
 
-登录页面存在一个表单要求用户输入用户名、密码以及验证码，并且存在一个注册按钮以及表示“我忘记密码”的链接。
+Si la soumission n'est pas valide, l'utilisateur est redirigé vers la page d'inscription via GET, où la page vérifie s'il y a un champ d'erreur et génère des messages d'erreur pertinents en fonction des mots-clés.
+Sinon, une page de bienvenue est affichée, et après quelques secondes, l'utilisateur est redirigé vers la page de connexion.
 
-点击注册按钮会导航至注册页面。
-点击“我忘记密码”链接，会导航至重置密码页面。
-点击验证码图片会刷新验证码。
+### Connexion
 
-验证码时在`src/captcha.php`生成的，正确的密钥保存于$_SESSION中。
+La page de connexion contient un formulaire demandant à l'utilisateur de saisir un nom d'utilisateur, un mot de passe et un code captcha, ainsi qu'un bouton d'inscription et un lien indiquant "J'ai oublié mon mot de passe".
 
-当用户提交登录表单时，会将表单以POST提交给`src/login.php`，该API会检查提交是否合法。
+Cliquer sur le bouton d'inscription redirige vers la page d'inscription.
+Cliquer sur le lien "J'ai oublié mon mot de passe" redirige vers la page de réinitialisation du
 
-一个合法的提交必须满足：
-- 验证码正确
-- 用户名与密码匹配
+ mot de passe.
+Cliquer sur l'image du captcha rafraîchit le captcha.
 
-当用户提交不合法时，会以GET方式返回登录页面，登录页面会检查是否有error字段，并会按照关键字生成相关错误提示。
+Le captcha est généré dans `src/captcha.php`, et la clé correcte est sauvegardée dans `$_SESSION`.
 
-否则会跳转至首页。
+Lorsque l'utilisateur soumet le formulaire de connexion, celui-ci est posté à `src/login.php` via POST, et cette API vérifie si la soumission est valide.
 
-#### 管理员
+Une soumission valide doit respecter les critères suivants :
+- Le captcha est correct.
+- Le nom d'utilisateur et le mot de passe correspondent.
 
-管理员用户的并无特殊的登录或者管理页面，但是管理员用户可以修改文章，删除文章，以及为文章编辑TAG。
+Si la soumission n'est pas valide, l'utilisateur est redirigé vers la page de connexion via GET, où la page vérifie s'il y a un champ d'erreur et génère des messages d'erreur pertinents en fonction des mots-clés.
 
-管理员用户的标志是`$_SESSION['is_admin']`为`true`。
+Sinon, l'utilisateur est redirigé vers la page d'accueil.
 
-如果用户是管理员，会在文章详情页展示编辑tag、编辑文章和删除文章按钮，以及在个人信息页展示查看LOG分析的链接。
+#### Administrateur
 
-并不需要担心普通用户通过修改前端代码来获取管理员权限，因为API会检查用户是否为管理员。
+Les utilisateurs administrateurs n'ont pas de page de connexion ou de gestion spéciale, mais ils peuvent modifier les articles, supprimer des articles, et éditer les tags des articles.
 
-### 个人信息
+Le signe qu'un utilisateur est un administrateur est que `$_SESSION['is_admin']` est `true`.
 
-#### 查看个人信息
+Si l'utilisateur est un administrateur, les boutons pour éditer les tags, éditer les articles et supprimer des articles sont affichés sur la page de détails de l'article, ainsi qu'un lien pour voir l'analyse des logs sur la page des informations personnelles.
 
-个人信息页面会展示用户的用户名，邮箱，是否为管理员，以及注册时间。并且会生成指向修改个人信息的链接、登出的链接以及浏览LOG分析的链接。
+Il n'est pas nécessaire de s'inquiéter que les utilisateurs ordinaires puissent obtenir des droits d'administrateur en modifiant le code frontal, car l'API vérifie si l'utilisateur est un administrateur.
 
-#### 修改个人信息
+### Informations Personnelles
 
-修改个人信息页面存在一个表单，要求用户输入新的用户名、邮箱。
+#### Voir les Informations Personnelles
 
-首先会查询用户的原始信息，作为默认值展示在表单中。
+La page des informations personnelles affiche le nom d'utilisateur de l'utilisateur, son adresse e-mail, s'il est administrateur, et la date d'inscription. Elle génère également des liens vers la page de modification des informations personnelles, la page de déconnexion, et la page d'analyse des logs.
 
-当用户提交修改表单时，会将表单以POST提交给`src/update_profile.php`，该API会检查提交是否合法。
+#### Modifier les Informations Personnelles
 
-一个合法的提交必须满足：
-- 用户名必须至少有5个字符，并且不存在重名用户
-- 邮箱合法
+La page de modification des informations personnelles contient un formulaire demandant à l'utilisateur de saisir un nouveau nom d'utilisateur et une nouvelle adresse e-mail.
 
-如果提交不合法，会以GET方式返回修改个人信息页面，修改个人信息页面会检查是否有error字段，并会按照关键字生成相关错误提示。
+La page commence par interroger les informations originales de l'utilisateur pour les afficher comme valeurs par défaut dans le formulaire.
 
-否则会提示修改成功，并在数秒后转到个人信息页面。
+Lorsque l'utilisateur soumet le formulaire de modification, celui-ci est posté à `src/update_profile.php` via POST, et cette API vérifie si la soumission est valide.
 
-### 修改密码
+Une soumission valide doit respecter les critères suivants :
+- Le nom d'utilisateur doit comporter au moins 5 caractères et ne doit pas déjà exister.
+- L'adresse e-mail doit être valide.
 
-修改密码页面存在一个表单，要求用户输入用户名、新密码。
+Si la soumission n'est pas valide, l'utilisateur est redirigé vers la page de modification des informations personnelles via GET, où la page vérifie s'il y a un champ d'erreur et génère des messages d'erreur pertinents en fonction des mots-clés.
 
-当用户提交修改密码表单时，会将表单以POST提交给`src/reset_password.php`，该API会检查提交是否合法。
+Sinon, un message de succès est affiché, et après quelques secondes, l'utilisateur est redirigé vers la page des informations personnelles.
 
-一个合法的提交必须满足：
-- 密码必须至少有8个字符，并且同时包含数组和字母
+### Modifier le Mot de Passe
 
-如果提交不合法，会以GET方式返回修改密码页面，修改密码页面会检查是否有error字段，并会按照关键字生成相关错误提示。
+La page de modification du mot de passe contient un formulaire demandant à l'utilisateur de saisir son nom d'utilisateur et un nouveau mot de passe.
 
-否则会提示修改成功，并在数秒后转到登录页面。
+Lorsque l'utilisateur soumet le formulaire de modification du mot de passe, celui-ci est posté à `src/reset_password.php` via POST, et cette API vérifie si la soumission est valide.
 
-### 退出登录
+Une soumission valide doit respecter les critères suivants :
+- Le mot de passe doit comporter au moins 8 caractères et contenir à la fois des chiffres et des lettres.
 
-退出登录会清空`$_SESSION`以及`$_COOKIE`并且跳转至首页。
+Si la soumission n'est pas valide, l'utilisateur est redirigé vers la page de modification du mot de passe via GET, où la page vérifie s'il y a un champ d'erreur et génère des messages d'erreur pertinents en fonction des mots-clés.
+
+Sinon, un message de succès est affiché, et après quelques secondes, l'utilisateur est redirigé vers la page de connexion.
+
+### Se Déconnecter
+
+Se déconnecter efface `$_SESSION` et `$_COOKIE` et redirige vers la page d'accueil.
 
 ```php
 $_SESSION = array();
@@ -489,15 +552,17 @@ session_destroy();
 setcookie("username", "", time()-3600, "/");
 ```
 
-## 论坛管理
+## Gestion du Forum
 
-### 创建文章
+### Créer un Article
 
-对于所有登录用户，均可以创建文章，创建文章时需要填写标题，内容，并在创建成功后自动成为文章的第一位作者。
+Tous les utilisateurs connectés peuvent créer des articles, et lors de la création d'un article, ils doivent remplir le titre et le contenu, et deviennent automatiquement le premier a
 
-权限检查是两部分，一部分是页面展示，另一部分是API检查。
+uteur de l'article après la création réussie.
 
-在页面展示时，会检查用户是否登录，如果未登录，会跳转至登录页面。
+La vérification des permissions se fait en deux parties, une partie est la présentation de la page, et l'autre partie est la vérification de l'API.
+
+Sur la page de présentation, il est vérifié si l'utilisateur est connecté, et s'il ne l'est pas, il est redirigé vers la page de connexion.
 
 ```php
 <div class="user-info">
@@ -509,7 +574,7 @@ setcookie("username", "", time()-3600, "/");
 </div>
 ```
 
-在API检查时，会检查用户是否登录，如果未登录，会返回错误信息。
+Lors de la vérification de l'API, il est vérifié si l'utilisateur est connecté, et s'il ne l'est pas, un message d'erreur est renvoyé.
 
 ```php
 $author_id = $_SESSION['user_id'] ?? null;
@@ -519,82 +584,38 @@ if (!$author_id) {
 }
 ```
 
-创建文章页允许登录的用户创建新的文章。以下是详细的功能说明和技术实现细节：
+La page de création d'article permet aux utilisateurs connectés de créer de nouveaux articles. Voici une explication détaillée des fonctionnalités et des détails techniques de l'implémentation :
 
-#### 文章创建表单
-- **标题输入**：页面包含一个输入框，用于输入文章的标题。此输入框为必填项。
-- **内容输入**：还有一个文本区域供用户输入文章的内容。这也是一个必填项。
-- **提交按钮**：一个按钮用于提交文章。点击此按钮后，页面将通过 JavaScript 函数 `submitArticle` 发起创建文章的请求。
+#### Formulaire de Création d'Article
+- **Entrée du Titre** : La page contient une zone de texte pour saisir le titre de l'article. Cette zone est obligatoire.
+- **Entrée du Contenu** : Il y a aussi une zone de texte pour que l'utilisateur saisisse le contenu de l'article. Ceci est également obligatoire.
+- **Bouton de Soumission** : Un bouton est disponible pour soumettre l'article. Lorsque cet bouton est cliqué, la page utilise la fonction JavaScript `submitArticle` pour lancer la requête de création de l'article.
 
-#### 技术实现细节
+#### Détails Techniques de l'Implémentation
 
-##### 前端表单处理
-- **输入验证**：JavaScript 用于在前端验证标题和内容的输入。如果用户试图提交空的标题或内容，将显示一个警告消息，并阻止表单提交。
-- **表单提交**：使用 JavaScript 的 `submitArticle` 函数处理表单的提交逻辑。该函数检查输入，构建一个包含标题和内容的 GET 请求，并发送到后端的 API。
+##### Traitement du Formulaire Frontal
+- **Validation des Entrées** : JavaScript est utilisé pour valider les entrées de titre et de contenu au niveau frontal. Si l'utilisateur tente de soumettre un titre ou un contenu vide, un message d'alerte s'affiche et la soumission du formulaire est bloquée.
+- **Soumission du Formulaire** : La fonction JavaScript `submitArticle` gère la logique de soumission du formulaire. Cette fonction vérifie les entrées, construit une requête GET contenant le titre et le contenu, et l'envoie à l'API backend.
 
-##### API 调用
-- **创建文章**：当用户点击“提交文章”按钮，JavaScript 会调用后端的 `../../src/api/create_article.php` API。此 API 接受标题和内容作为参数，创建新的文章记录。
-- **成功与错误处理**：API 调用成功后，用户会收到成功的提示，并被重定向到新创建的文章的详情页面。如果创建失败或发生错误，用户将收到相应的错误消息。
+##### Appels API
+- **Création d'Article** : Lorsque l'utilisateur clique sur le bouton "Soumettre l'article", JavaScript appelle l'API backend `../../src/api/create_article.php`. Cette API accepte le titre et le contenu comme paramètres et crée un nouvel enregistrement d'article.
+- **Traitement des Réussites et des Erreurs** : Après l'appel de l'API, selon la réponse du serveur, un message de succès ou d'erreur est affiché à l'utilisateur. Si la création est réussie, l'utilisateur est redirigé vers la page de détails du nouvel article. Si la création échoue ou en cas d'erreur, un message d'erreur est affiché à l'utilisateur.
 
-##### 安全与维护
-- **输入清理**：使用 PHP 的 `htmlspecialchars` 函数对显示的用户名进行处理，防止跨站脚本攻击（XSS）。
-- **错误处理**：JavaScript 中的错误处理确保在发生网络或服务器错误时给用户清晰的反馈。
-
-
-### 编辑文章
-
-对于所有管理员用户，均可以修改文章。
-
-权限检查是两部分，一部分是页面展示，另一部分是API检查。
-
-在页面展示时，会检查用户是否为管理员，如果是管理员，会展示编辑tag、编辑文章和删除文章按钮。
-否则不会展示这些按钮。
-
-在API检查时，会检查用户是否为管理员，如果不是管理员，会返回错误信息。
-
-```php
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);     echo json_encode(['message' => 'login required']);
-    exit;
-}
-
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-    http_response_code(403);     echo json_encode(['message' => 'Access Denied: You are not an admin']);
-    exit;
-}
-```
-
-#### 页面布局与功能
-
-##### 表单初始化
-- **文章ID验证**：页面加载时首先检查是否有文章ID传递。如果没有文章ID，系统将显示错误消息，并将用户重定向回上一个页面。
-- **表单填充**：如果存在文章ID，页面将通过调用后端API获取文章的当前详情，并自动填充到表单中，以便用户进行编辑。
-
-#### 技术实现细节
-
-##### 数据获取
-- **获取文章详情**：使用 JavaScript 的 `fetch` 方法调用 `../../src/api/article.php`，传递文章ID以请求当前文章的详细信息。API响应成功后，将文章的标题和内容填充到表单中，准备进行编辑。
-- **错误处理**：如果获取文章详情失败，页面会显示错误消息，并允许用户返回上一页重新尝试。
-
-##### 表单提交
-- **提交更新**：表单使用 AJAX 方法提交，避免页面重新加载。用户编辑标题和内容后，点击“提交更改”按钮将通过 `axios` 发送 GET 请求到 `../../src/api/update_article.php`。请求包括文章ID、更新的标题和内容。
-- **更新反馈**：提交后，根据服务器响应向用户显示成功或错误消息。如果更新成功，页面将重定向到文章的详情页面。
-
-### 安全与维护
-- **用户权限验证**：页面加载前，服务器端脚本检查用户是否有权进行编辑操作，确保只有有权限的用户可以编辑文章。
-- **输入清理**：提交的数据通过后端脚本进行清理和验证，防止注入攻击和其他安全威胁。
+##### Sécurité et Maintenance
+- **Nettoyage des Entrées** : La fonction PHP `htmlspecialchars` est utilisée pour traiter l'affichage du nom d'utilisateur, prévenant les attaques par script intersite (XSS).
+- **Gestion des Erreurs** : La gestion des erreurs dans JavaScript assure que des retours clairs sont fournis à l'utilisateur en cas d'erreurs réseau ou serveur.
 
 
-### 删除文章
+### Éditer un Article
 
-对于所有管理员用户，均可以删除文章。
+Tous les utilisateurs administrateurs peuvent modifier des articles.
 
-权限检查是两部分，一部分是页面展示，另一部分是API检查。
+La vérification des permissions se fait en deux parties, une partie est la présentation de la page, et l'autre partie est la vérification de l'API.
 
-在页面展示时，会检查用户是否为管理员，如果是管理员，会展示编辑tag、编辑文章和删除文章按钮。
-否则不会展示这些按钮。
+Sur la page de présentation, il est vérifié si l'utilisateur est un administrateur, et s'il l'est, les boutons pour éditer les tags, éditer l'article et supprimer l'article sont affichés.
+Sinon, ces boutons ne sont pas affichés.
 
-在API检查时，会检查用户是否为管理员，如果不是管理员，会返回错误信息。
+Lors de la vérification de l'API, il est vérifié si l'utilisateur est un administrateur, et s'il ne l'est pas, un message d'erreur est renvoyé.
 
 ```php
 if (!isset($_SESSION['user_id'])) {
@@ -608,7 +629,51 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
 }
 ```
 
-本功能直接集成在文章详情页中，管理员用户可以在文章详情页点击“删除文章”按钮来删除文章。
+#### Agencement de la Page et Fonctionnalités
+
+##### Initialisation du Formulaire
+- **Vérification de l'ID de l'Article** : Lors du chargement de la page, il est d'abord vérifié si un ID d'article est passé. Si aucun ID d'article n'est présent, un message d'erreur est affiché, et l'utilisateur est redirigé vers la page précédente.
+- **Remplissage du Formulaire** : Si un ID d'article est présent, la page appelle l'API backend pour obtenir les détails actuels de l'article et remplit automatiquement le formulaire pour permettre à l'utilisateur de procéder à l'édition.
+
+#### Détails Techniques de l'Implémentation
+
+##### Obtention des Données
+- **Obtention des Détails de l'Article** : La méthode `fetch` de JavaScript est utilisée pour appeler `../../src/api/article.php`, en passant l'ID de l'article pour demander les détails actuels de l'article. Après une réponse réussie de l'API, le titre et le contenu de l'article sont remplis dans le formulaire, prêts pour l'édition.
+- **Gestion des Erreurs** : Si l'obtention des détails de l'article échoue, un message d'erreur est affiché sur la page, et l'utilisateur a la possibilité de retourner à la page précédente pour réessayer.
+
+##### Soumission du Formulaire
+- **Soumission des Mises à Jour** : Le formulaire est soumis via une méthode AJAX, évitant le rechargement de la page. Après que l'utilisateur ait édité le titre et le contenu, il clique sur le bouton "Soumettre les Changements" qui envoie une requête GET à `../../src/api/update_article.php` via `axios`. La requête inclut l'ID de l'article, le titre mis à jour et le contenu.
+- **Retour sur la Mise à Jour** : Après la soumission, selon la réponse du serveur, un message de succès ou d'erreur est affiché à l'utilisateur. Si la mise à jour réussit, la page est redirigée vers la page de détails de l'article.
+
+### Sécurité et Maintenance
+- **Vérification des Permissions Utilisateur** : Le script côté serveur vérifie avant le chargement de la page si l'utilisateur a le droit de procéder à l'édition, assurant que seuls les utilisateurs autorisés peuvent éditer l'article.
+- **Nettoyage des Entrées** : Les données soumises sont nettoyées et validées par le script backend, prévenant les attaques par injection et autres menaces sécuritaires.
+
+
+### Supprimer un Article
+
+Tous les utilisateurs administrateurs peuvent supprimer des articles.
+
+La vérification des permissions se fait en deux parties, une partie est la présentation de la page, et l'autre partie est la vérification de l'API.
+
+Sur la page de présentation, il est vérifié si l'utilisateur est un administrateur, et s'il l'est, les boutons pour éditer les tags, éditer l'article et supprimer l'article sont affichés.
+Sinon, ces boutons ne sont pas affichés.
+
+Lors de la vérification de l'API, il est vérifié si l'utilisateur est un administrateur, et s'il ne l'est pas, un message d'erreur est renvoyé.
+
+```php
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);     echo json_encode(['message' => 'login required']);
+    exit;
+}
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+    http_response_code(403);     echo json_encode(['message' => 'Access Denied: You are not an admin']);
+    exit;
+}
+```
+
+Cette fonctionnalité est directement intégrée dans la page de détails de l'article, permettant aux utilisateurs administrateurs de cliquer sur le bouton "Supprimer l'article" pour supprimer l'article.
 
 ```php
 function deleteArticle() {
@@ -630,16 +695,16 @@ function deleteArticle() {
     }
 ```
 
-### 为文章编辑TAG
+### Éditer les Tags d'un Article
 
-对于所有管理员用户，均可以为文章编辑TAG。
+Tous les utilisateurs administrateurs peuvent éditer les tags d'un article.
 
-权限检查是两部分，一部分是页面展示，另一部分是API检查。
+La vérification des permissions se fait en deux parties, une partie est la présentation de la page, et l'autre partie est la vérification de l'API.
 
-在页面展示时，会检查用户是否为管理员，如果是管理员，会展示编辑tag、编辑文章和删除文章按钮。
-否则不会展示这些按钮。
+Sur la page de présentation, il est vérifié si l'utilisateur est un administrateur, et s'il l'est, les boutons pour éditer les tags, éditer l'article et supprimer l'article sont affichés.
+Sinon, ces boutons ne sont pas affichés.
 
-在API检查时，会检查用户是否为管理员，如果不是管理员，会返回错误信息。
+Lors de la vérification de l'API, il est vérifié si l'utilisateur est un administrateur, et s'il ne l'est pas, un message d'erreur est renvoyé.
 
 ```php
 if (!isset($_SESSION['user_id'])) {
@@ -672,11 +737,11 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
 }
 ```
 
-## 会话管理
+## Gestion des Sessions
 
 ### $_SESSION
 
-当用户登录时，会将用户的用户名保存在`$_SESSION`中，以便在用户访问其他页面时，可以知道用户是否已经登录，并可以获知其他信息，如用户名，是否是管理员等。
+Lorsqu'un utilisateur se connecte, son nom d'utilisateur est sauvegardé dans `$_SESSION`, permettant de savoir si l'utilisateur est connecté lorsqu'il visite d'autres pages, et de connaître d'autres informations telles que le nom d'utilisateur, s'il est administrateur, etc.
 
 ```php
 if (password_verify($password, $hashed_password)) {
@@ -690,7 +755,7 @@ if (password_verify($password, $hashed_password)) {
     }
 ```
 
-当用户退出登录时，会清空`$_SESSION`。
+Lorsqu'un utilisateur se déconnecte, `$_SESSION` est vidé.
 
 ```php
 $_SESSION = array();
@@ -699,8 +764,8 @@ session_destroy();
 
 ### $_COOKIE
 
-当用户登录时，会将用户的用户名保存在`$_COOKIE`中。
-当在时限内再次访问网站时，会自动填充用户名。
+Lorsqu'un utilisateur se connecte, son nom d'utilisateur est sauvegardé dans `$_COOKIE`.
+Lorsqu'il visite à nouveau le site dans le délai imparti, son nom d'utilisateur est automatiquement rempli.
 
 ```php
 if (password_verify($password, $hashed_password)) {
@@ -710,13 +775,13 @@ if (password_verify($password, $hashed_password)) {
     }
 ```
 
-当用户主动退出登录时，会清空`$_COOKIE`。
+Lorsqu'un utilisateur se déconnecte volontairement, `$_COOKIE` est vidé.
 
 ```php
 setcookie("username", "", time()-3600, "/");  
 ```
 
-当用户筛选TAG时，会将用户的TAG选择保存在`$_COOKIE`中。
+Lorsqu'un utilisateur filtre les tags, ses choix de tags sont sauvegardés dans `$_COOKIE`.
 
 ```php
 if (isset($_POST['tag_ids'])) {
@@ -725,11 +790,11 @@ if (isset($_POST['tag_ids'])) {
 }
 ```
 
-## 分页功能
+## Fonction de Pagination
 
-分页逻辑实现于数据库层，php只能获取一页的数据以及符合条件的数据条目数量。
+La logique de pagination est implémentée au niveau de la base de données, et PHP ne peut obtenir qu'une page de données et le nombre d'entrées correspondant aux critères.
 
-这里展示按照TAG分类（包含任意一个即可）的文章列表的分页逻辑实现。
+Voici un exemple de la logique de pagination pour la liste des articles classée par tags (incluant n'importe quel tag).
 
 ```mysql
 -- Create stored procedure:
@@ -772,11 +837,11 @@ END //
 DELIMITER ;
 ```
 
-## 日志功能
+## Fonctionnalité des Journaux
 
-### 日志记录
+### Enregistrement des Journaux
 
-在本项目中，我们使用了文件日志的方式记录了用户的操作日志以及文章的操作日志。
+Dans ce projet, nous avons utilisé des journaux de fichiers pour enregistrer les journaux d'opérations des utilisateurs ainsi que les journaux d'opérations des articles.
 
 ```user.txt
 User:1 Action:Login IP:127.0.0.1 Host:LAPTOP-V8J4LDQC OS:Windows Browser:Chrome AT:2024-05-06 22:04:49
@@ -787,8 +852,8 @@ User:6 Action:Login IP:127.0.0.1 Host:LAPTOP-V8J4LDQC OS:Windows Browser:Chrome 
 User:6 Action:ResetPassword AT:2024-05-06 22:40:42
 ```
 
-在用户日志中，我们记录了用户的登录、注册、修改个人信息、重置密码等操作。
-当用户登录时，我们记录了用户的IP地址、主机名、操作系统、浏览器等信息。
+Dans les journaux des utilisateurs, nous avons enregistré des actions telles que la connexion, l'inscription, la mise à jour des informations personnelles, la réinitialisation du mot de passe, etc.
+Lorsqu'un utilisateur se connecte, nous enregistrons son adresse IP, le nom de l'hôte, le système d'exploitation, le navigateur, etc.
 
 ```article_logs.txt
 User:1 Article:18 AT:2024-05-06 22:42:47 Action:Read
@@ -799,37 +864,37 @@ User:1 Article:35 AT:2024-05-06 22:43:13 Action:Delete
 User:1 Article:1 AT:2024-05-07 02:38:11 Action:Read
 ```
 
-在文章日志中，我们记录了用户对文章的操作，包括阅读、创建、修改、删除等操作。
+Dans les journaux des articles, nous avons enregistré des actions telles que la lecture, la création, la mise à jour, la suppression, etc.
 
-### 日志分析
+### Analyse des Journaux
 
-我们编写了一系列的PHP脚本，用于对日志进行分析。
+Nous avons écrit une série de scripts PHP pour analyser les journaux.
 
-v1.php: 每日流量分析
+v1.php: Analyse du trafic quotidien
 
 ![v1](./v1.jpg)
 
-v2.php: 每日新增/活跃用户分析
+v2.php: Analyse des nouveaux utilisateurs actifs/quotidiens
 
 ![v2](./v2.jpg)
 
-v3.php: 最热时段/页面/操作分析
+v3.php: Analyse des périodes/pages/opérations les plus fréquentées
 
 ![v3](./v3.jpg)
 
-v4.php: 每日文章统计
+v4.php: Statistiques quotidiennes des articles
 
 ![v4](./v4.jpg)
 
-v5.php: 用户惯用分析
+v5.php: Analyse des habitudes des utilisateurs
 
 ![v5](./v5.jpg)
 
-## 安全性设计
+## Conception de la Sécurité
 
-### 密码加密
+### Chiffrement des Mots de Passe
 
-密码加密使用了PHP内置的`password_hash`函数，使用`PASSWORD_DEFAULT`算法加密。
+Le chiffrement des mots de passe utilise la fonction intégrée de PHP `password_hash`, en utilisant l'algorithme `PASSWORD_DEFAULT`.
 
 ```php
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -837,7 +902,7 @@ $stmt = $conn->prepare("INSERT INTO users (username, password, email) VALUES (?,
 $stmt->bind_param("sss", $username, $hashed_password, $email);
 ```
 
-### 登录验证码
+### Code Captcha de Connexion
 
 ```php
 <?php
@@ -867,17 +932,17 @@ $font = '../ttf/CascadiaMono.ttf'; imagettftext($image, 20, 0, 30, 30, $text_col
 // Output the image
 ```
 
-验证码是在`src/captcha.php`生成的，正确的密钥保存于`$_SESSION`中。
-生成的验证码图片会在登录页面展示，并且点击验证码图片会刷新验证码。
-验证码图片的生成逻辑为4个随机字符，以及一些干扰线和点。
+Le captcha est généré dans `src/captcha.php`, et la clé correcte est sauvegardée dans `$_SESSION`.
+L'image du captcha générée est affichée sur la page de connexion, et cliquer sur l'image du captcha rafraîchit le captcha.
+La logique de génération du captcha comprend 4 caractères aléatoires, ainsi que quelques lignes de perturbation et des points.
 
-### SQL注入防范
+### Prévention des Injections SQL
 
-#### 应用层
+#### Couche Application
 
-为了防止SQL注入，我们使用了mysqli的预处理语句绑定参数的方式，而不是直接拼接SQL语句。
+Pour prévenir les injections SQL, nous utilisons la méthode de liaison de paramètres des instructions préparées mysqli, au lieu de concaténer directement les instructions SQL.
 
-以下是一个用户登录API的示例：
+Voici un exemple de l'API de connexion utilisateur :
 
 ```php
 $sql = "SELECT user_id, username, password, email, is_admin FROM users WHERE username = ?";
@@ -888,11 +953,11 @@ $stmt->bind_result($id, $username, $hashed_password, $email, $is_admin);
 $stmt->fetch();
 ```
 
-#### 数据库层
+#### Couche Base de Données
 
-在数据库层，我们大量使用了存储过程来执行SQL语句，而不是直接在PHP中拼接SQL语句。
+Au niveau de la base de données, nous utilisons largement des procédures stockées pour exécuter les instructions SQL, au lieu de concaténer directement les instructions SQL dans le PHP.
 
-以下是一个更新文章TAG列表的API的示例：
+Voici un exemple d'une API qui met à jour la liste des tags d'un article :
 
 ```php
 $stmt = $conn->prepare("CALL UpdateArticleTags(?, ?, ?)");
